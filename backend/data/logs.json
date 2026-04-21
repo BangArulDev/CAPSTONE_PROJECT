@@ -1,0 +1,28 @@
+{
+  "logs": [
+    {
+      "id": "83e9aa22-5943-4dba-b94e-f39de82bf122",
+      "userId": "6927b8f0-05be-4fec-a6cd-deff93e18a29",
+      "date": "2026-04-21",
+      "wasteKg": 1.5,
+      "energyKwh": 8,
+      "transportMode": "bicycle",
+      "waterLiters": 120,
+      "notes": "Test entry",
+      "points": 115,
+      "createdAt": "2026-04-21T06:04:49.289Z"
+    },
+    {
+      "id": "5fc4b8b2-f837-44f8-af91-14a900b2c777",
+      "userId": "197b558c-8e40-406f-8664-0f6ea40a7fd1",
+      "date": "2026-04-21",
+      "wasteKg": 5,
+      "energyKwh": 7,
+      "transportMode": "motorcycle",
+      "waterLiters": 140,
+      "notes": "",
+      "points": 70,
+      "createdAt": "2026-04-21T07:12:22.231Z"
+    }
+  ]
+}

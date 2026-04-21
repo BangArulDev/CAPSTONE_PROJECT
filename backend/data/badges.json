@@ -1,0 +1,44 @@
+{"badges": [
+  {
+    "id": "first_log",
+    "name": "First Step",
+    "description": "Submit your first eco-log",
+    "icon": "🌱",
+    "requirement": { "type": "log_count", "value": 1 }
+  },
+  {
+    "id": "week_streak",
+    "name": "Green Week",
+    "description": "Log eco-data for 7 consecutive days",
+    "icon": "🌿",
+    "requirement": { "type": "streak", "value": 7 }
+  },
+  {
+    "id": "eco_warrior",
+    "name": "Eco Warrior",
+    "description": "Reach 500 eco-points",
+    "icon": "🏆",
+    "requirement": { "type": "points", "value": 500 }
+  },
+  {
+    "id": "month_streak",
+    "name": "Green Month",
+    "description": "Log eco-data for 30 consecutive days",
+    "icon": "🌳",
+    "requirement": { "type": "streak", "value": 30 }
+  },
+  {
+    "id": "low_waste",
+    "name": "Zero Waste Hero",
+    "description": "Keep waste under 1kg for 5 days",
+    "icon": "♻️",
+    "requirement": { "type": "low_waste_days", "value": 5 }
+  },
+  {
+    "id": "energy_saver",
+    "name": "Energy Saver",
+    "description": "Keep energy use under 5 kWh for 5 days",
+    "icon": "⚡",
+    "requirement": { "type": "low_energy_days", "value": 5 }
+  }
+]}

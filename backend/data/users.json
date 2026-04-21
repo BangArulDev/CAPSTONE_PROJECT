@@ -1,0 +1,30 @@
+{
+  "users": [
+    {
+      "id": "6927b8f0-05be-4fec-a6cd-deff93e18a29",
+      "name": "Eco Tester",
+      "email": "test@ecowise.com",
+      "password": "$2b$10$kNRbFmB9QDmt.3R7ZXst8e3VhrTm93xIc.yctEleLe9R0xUejK5wi",
+      "ecoPoints": 115,
+      "streak": 1,
+      "lastLogDate": "2026-04-21",
+      "badges": [
+        "first_log"
+      ],
+      "createdAt": "2026-04-21T06:03:54.394Z"
+    },
+    {
+      "id": "197b558c-8e40-406f-8664-0f6ea40a7fd1",
+      "name": "ok",
+      "email": "ok@gmail.com",
+      "password": "$2b$10$cwL54CLbyXxj/3YjBiN8g.jXkBWlsgvYWHVo7qZfavW1cBsTm3HOy",
+      "ecoPoints": 70,
+      "streak": 1,
+      "lastLogDate": "2026-04-21",
+      "badges": [
+        "first_log"
+      ],
+      "createdAt": "2026-04-21T07:11:53.025Z"
+    }
+  ]
+}
