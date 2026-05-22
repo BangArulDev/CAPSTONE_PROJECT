@@ -1,17 +1,13 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import {
-  FiHome, FiBarChart2, FiZap, FiAward, FiUsers,
-  FiLogOut, FiMenu, FiX, FiChevronDown
-} from 'react-icons/fi';
 
 const navItems = [
-  { path: '/dashboard', label: 'Dashboard', icon: <FiHome size={15} /> },
-  { path: '/predictions', label: 'AI Predictions', icon: <FiBarChart2 size={15} /> },
-  { path: '/recommendations', label: 'Tips', icon: <FiZap size={15} /> },
-  { path: '/badges', label: 'Badges', icon: <FiAward size={15} /> },
-  { path: '/leaderboard', label: 'Leaderboard', icon: <FiUsers size={15} /> },
+  { path: '/dashboard', label: 'Beranda', emoji: '🏠' },
+  { path: '/predictions', label: 'Prediksi AI', emoji: '🤖' },
+  { path: '/recommendations', label: 'Tips Dapur', emoji: '💡' },
+  { path: '/badges', label: 'Pencapaian', emoji: '🏆' },
+  { path: '/leaderboard', label: 'Papan Nilai', emoji: '🌟' },
 ];
 
 const Navbar = () => {
@@ -25,121 +21,145 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="glass sticky top-0 z-50" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <>
+      <nav className="glass sticky top-0 z-50">
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 68 }}>
 
-          {/* ── Logo ── */}
-          <NavLink to="/dashboard" className="flex items-center gap-2.5 no-underline group">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}>
-              <span className="text-sm">🌱</span>
-            </div>
-            <span className="font-bold text-base text-white tracking-tight"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              Eco<span className="gradient-text">Wise</span>
-            </span>
-          </NavLink>
-
-          {/* ── Desktop Nav ── */}
-          <div className="hidden md:flex items-center gap-0.5">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={({ isActive }) =>
-                  `nav-link ${isActive ? 'active' : ''}`
-                }
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </NavLink>
-            ))}
-          </div>
-
-          {/* ── User Info ── */}
-          <div className="hidden md:flex items-center gap-3">
-            {/* Points Badge */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full"
-              style={{
-                background: 'rgba(34,197,94,0.08)',
-                border: '1px solid rgba(34,197,94,0.2)'
+            {/* ── Logo ── */}
+            <NavLink to="/dashboard" className="no-underline" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{
+                width: 42, height: 42, borderRadius: 14,
+                background: 'linear-gradient(135deg, #e8834a, #f7c948)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 22, boxShadow: '0 4px 12px rgba(232,131,74,0.35)'
               }}>
-              <div className="dot-live" />
-              <span className="text-green-400 text-xs font-semibold">
-                {(user?.ecoPoints || 0).toLocaleString()} pts
-              </span>
-            </div>
-
-            {/* Avatar */}
-            <div className="flex items-center gap-2 cursor-pointer group">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white"
-                style={{ background: 'linear-gradient(135deg, #22c55e, #818cf8)' }}>
-                {user?.name?.[0]?.toUpperCase()}
-              </div>
-              <div className="hidden lg:block">
-                <p className="text-white text-sm font-medium leading-tight">{user?.name}</p>
-                <p className="text-gray-500 text-xs">🔥 {user?.streak || 0} day streak</p>
-              </div>
-            </div>
-
-            {/* Logout */}
-            <button
-              onClick={handleLogout}
-              title="Logout"
-              className="p-2 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-all"
-            >
-              <FiLogOut size={16} />
-            </button>
-          </div>
-
-          {/* ── Mobile Toggle ── */}
-          <button
-            className="md:hidden w-9 h-9 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 transition-all"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
-            {mobileOpen ? <FiX size={20} /> : <FiMenu size={20} />}
-          </button>
-        </div>
-      </div>
-
-      {/* ── Mobile Menu ── */}
-      {mobileOpen && (
-        <div className="md:hidden" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-          <div className="px-3 py-3 space-y-1">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                onClick={() => setMobileOpen(false)}
-                className={({ isActive }) =>
-                  `nav-link flex items-center gap-2 w-full py-2.5 ${isActive ? 'active' : ''}`
-                }
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </NavLink>
-            ))}
-          </div>
-          <div className="px-4 py-3 flex items-center justify-between"
-            style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
-                style={{ background: 'linear-gradient(135deg, #22c55e, #818cf8)' }}>
-                {user?.name?.[0]?.toUpperCase()}
+                🍃
               </div>
               <div>
-                <p className="text-white text-sm font-medium">{user?.name}</p>
-                <p className="text-green-400 text-xs">{user?.ecoPoints || 0} pts</p>
+                <div style={{
+                  fontFamily: 'Poppins, sans-serif', fontWeight: 800,
+                  fontSize: 17, color: 'var(--text-primary)', lineHeight: 1.1
+                }}>
+                  Dapur<span className="gradient-text">Lestari</span>
+                </div>
+                <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600 }}>
+                  Kelola Limbah Dapurmu 🌿
+                </div>
               </div>
+            </NavLink>
+
+            {/* ── Desktop Nav ── */}
+            <div style={{ display: 'none' }} className="desktop-nav">
+              {navItems.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                >
+                  <span>{item.emoji}</span>
+                  <span>{item.label}</span>
+                </NavLink>
+              ))}
             </div>
-            <button onClick={handleLogout} className="flex items-center gap-1.5 text-red-400 text-sm px-3 py-1.5 rounded-lg hover:bg-red-500/10 transition-all">
-              <FiLogOut size={14} /> Logout
-            </button>
+
+            {/* ── User Info ── */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              {/* Points Badge */}
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                padding: '7px 14px', borderRadius: 50,
+                background: 'rgba(232,131,74,0.1)',
+                border: '1.5px solid rgba(232,131,74,0.25)',
+              }}>
+                <div className="dot-live" />
+                <span style={{ color: 'var(--primary)', fontSize: 13, fontWeight: 800 }}>
+                  ⭐ {(user?.ecoPoints || 0).toLocaleString()} poin
+                </span>
+              </div>
+
+              {/* Avatar */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{
+                  width: 38, height: 38, borderRadius: '50%',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 15, fontWeight: 900, color: 'white',
+                  background: 'linear-gradient(135deg, #e8834a, #5cb285)',
+                  boxShadow: '0 3px 10px rgba(232,131,74,0.3)',
+                  cursor: 'pointer',
+                }}>
+                  {user?.name?.[0]?.toUpperCase()}
+                </div>
+                <div style={{ display: 'none' }} className="user-name-block">
+                  <p style={{ color: 'var(--text-primary)', fontSize: 14, fontWeight: 700 }}>
+                    Bu {user?.name?.split(' ')[0]}
+                  </p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: 11 }}>
+                    🔥 {user?.streak || 0} hari beruntun
+                  </p>
+                </div>
+              </div>
+
+              {/* Logout */}
+              <button
+                onClick={handleLogout}
+                title="Keluar"
+                style={{
+                  padding: '8px 14px', borderRadius: 12, border: 'none',
+                  background: 'rgba(241,112,112,0.1)', color: '#e05252',
+                  cursor: 'pointer', fontWeight: 700, fontSize: 13,
+                  transition: 'all 0.2s', fontFamily: 'Nunito, sans-serif',
+                  display: 'flex', alignItems: 'center', gap: 5,
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = 'rgba(241,112,112,0.2)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'rgba(241,112,112,0.1)'}
+              >
+                <span>🚪</span>
+                <span style={{ display: 'none' }} className="logout-text">Keluar</span>
+              </button>
+            </div>
           </div>
         </div>
-      )}
-    </nav>
+      </nav>
+
+      {/* ── Mobile Bottom Navigation ── */}
+      <nav className="bottom-nav md:hidden">
+        <div style={{
+          display: 'flex', justifyContent: 'space-around', alignItems: 'center', padding: '4px 0'
+        }}>
+          {navItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              style={({ isActive }) => ({
+                display: 'flex', flexDirection: 'column', alignItems: 'center',
+                gap: 2, padding: '8px 12px', borderRadius: 14, textDecoration: 'none',
+                transition: 'all 0.2s',
+                background: isActive ? 'rgba(232,131,74,0.12)' : 'transparent',
+                color: isActive ? 'var(--primary)' : 'var(--text-muted)',
+              })}
+            >
+              <span style={{ fontSize: 20 }}>{item.emoji}</span>
+              <span style={{ fontSize: 10, fontWeight: 700, whiteSpace: 'nowrap' }}>
+                {item.label}
+              </span>
+            </NavLink>
+          ))}
+        </div>
+      </nav>
+
+      {/* Spacer for bottom nav on mobile */}
+      <div className="md:hidden" style={{ height: 72 }} />
+
+      <style>{`
+        @media (min-width: 768px) {
+          .desktop-nav { display: flex !important; align-items: center; gap: 4px; }
+          .user-name-block { display: block !important; }
+          .logout-text { display: inline !important; }
+          .bottom-nav { display: none !important; }
+        }
+      `}</style>
+    </>
   );
 };
 

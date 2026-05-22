@@ -11,6 +11,7 @@ const AuthPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isWide, setIsWide] = useState(window.innerWidth >= 1024);
 
   const { login, register, isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -18,6 +19,12 @@ const AuthPage = () => {
   useEffect(() => {
     if (isAuthenticated) navigate('/dashboard');
   }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    const onResize = () => setIsWide(window.innerWidth >= 1024);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -30,14 +37,14 @@ const AuthPage = () => {
     setError('');
     try {
       if (isRegister) {
-        if (!form.name.trim()) throw { message: 'Name is required' };
+        if (!form.name.trim()) throw { message: 'Nama tidak boleh kosong ya, Bu!' };
         await register(form.name, form.email, form.password);
       } else {
         await login(form.email, form.password);
       }
       navigate('/dashboard');
     } catch (err) {
-      setError(err?.message || 'Something went wrong. Please try again.');
+      setError(err?.message || 'Oops! Terjadi kesalahan. Coba lagi ya!');
     } finally {
       setLoading(false);
     }
@@ -49,113 +56,180 @@ const AuthPage = () => {
     setForm({ name: '', email: '', password: '' });
   };
 
-  const benefits = ['🤖 AI-powered eco analysis', '♻️ Daily habit tracking', '🏆 Gamification & rewards', '📊 Predictive trend charts'];
+  const benefits = [
+    '🤖 Prediksi limbah dapur dengan AI',
+    '🗑️ Catat limbah harian dengan mudah',
+    '🏆 Kumpulkan poin & lencana',
+    '💡 Dapat tips dapur yang berguna',
+  ];
 
   return (
-    <div className="min-h-screen flex" style={{ background: 'var(--bg-dark)' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--bg-main)' }}>
 
-      {/* LEFT PANEL */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col justify-center px-16 relative overflow-hidden">
-        {/* BG */}
-        <div className="hero-blob" style={{ width: 500, height: 500, top: '-150px', right: '-100px', background: 'radial-gradient(circle, rgba(34,197,94,0.08), transparent 70%)' }} />
-        <div className="hero-blob" style={{ width: 400, height: 400, bottom: '-100px', left: '-50px', background: 'radial-gradient(circle, rgba(129,140,248,0.06), transparent 70%)' }} />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(6,13,26,0.97) 0%, rgba(10,20,40,0.95) 100%)' }} />
+      {/* LEFT PANEL — hanya tampil di layar lebar (≥1024px) */}
+      {isWide && (
+        <div style={{
+          width: '50%', display: 'flex', flexDirection: 'column', justifyContent: 'center',
+          padding: '60px 64px', position: 'relative', overflow: 'hidden',
+          background: 'linear-gradient(135deg, #2d1c0e 0%, #4a2c10 50%, #3d2008 100%)',
+          flexShrink: 0,
+        }}>
+          {/* Background decorations */}
+          <div style={{
+            position: 'absolute', top: -100, right: -100, width: 400, height: 400,
+            borderRadius: '50%', background: 'radial-gradient(circle, rgba(232,131,74,0.12), transparent 70%)',
+            filter: 'blur(60px)', pointerEvents: 'none',
+          }} />
+          <div style={{
+            position: 'absolute', bottom: -80, left: -50, width: 350, height: 350,
+            borderRadius: '50%', background: 'radial-gradient(circle, rgba(247,201,72,0.08), transparent 70%)',
+            filter: 'blur(60px)', pointerEvents: 'none',
+          }} />
 
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          className="relative z-10"
-        >
-          {/* Logo */}
-          <div className="flex items-center gap-3 mb-14">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center glow-green"
-              style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}>
-              <span className="text-xl">🌱</span>
-            </div>
-            <span className="text-2xl font-bold text-white" style={{ fontFamily: 'Space Grotesk' }}>
-              Eco<span className="gradient-text">Wise</span>
-            </span>
-          </div>
+          {/* Floating vegetables decoration */}
+          <div style={{ position: 'absolute', top: '15%', right: '10%', fontSize: 52, opacity: 0.15, transform: 'rotate(20deg)', pointerEvents: 'none' }}>🥦</div>
+          <div style={{ position: 'absolute', bottom: '25%', right: '5%', fontSize: 44, opacity: 0.1, transform: 'rotate(-10deg)', pointerEvents: 'none' }}>🍅</div>
 
-          <h2 className="text-4xl font-black mb-3 text-white leading-tight" style={{ fontFamily: 'Space Grotesk' }}>
-            Track your impact,<br />
-            <span className="gradient-text-hero">change the world.</span>
-          </h2>
-          <p className="text-lg mb-10 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-            AI-powered insights to help you live more sustainably, every single day.
-          </p>
-
-          {/* Benefits */}
-          <div className="space-y-3">
-            {benefits.map((b, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 + i * 0.1 }}
-                className="flex items-center gap-3"
-              >
-                <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)' }}>
-                  <FiCheck size={11} style={{ color: '#4ade80' }} />
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            style={{ position: 'relative', zIndex: 10 }}
+          >
+            {/* Logo */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 48 }}>
+              <div style={{
+                width: 48, height: 48, borderRadius: 16, fontSize: 24,
+                background: 'linear-gradient(135deg, #e8834a, #f7c948)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 6px 20px rgba(232,131,74,0.4)',
+              }}>🍃</div>
+              <div>
+                <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 22, color: 'white', lineHeight: 1.1 }}>
+                  Dapur
+                  <span style={{
+                    background: 'linear-gradient(135deg, #e8834a, #f7c948)',
+                    WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+                  }}>Lestari</span>
                 </div>
-                <span className="text-sm" style={{ color: '#94a3b8' }}>{b}</span>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Bottom badge */}
-          <div className="mt-12 inline-flex items-center gap-3 px-4 py-3 rounded-2xl"
-            style={{ background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.15)' }}>
-            <div className="flex -space-x-1.5">
-              {['A', 'B', 'C', 'D'].map((l, i) => (
-                <div key={i} className="w-7 h-7 rounded-full border-2 flex items-center justify-center text-xs font-bold text-white"
-                  style={{ background: `hsl(${i * 60 + 120}, 55%, 35%)`, borderColor: 'transparent' }}>
-                  {l}
-                </div>
-              ))}
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-white">Trusted by 15,000+ users</p>
-              <div className="flex items-center gap-0.5 mt-0.5">
-                {[...Array(5)].map((_, i) => <FiCheck key={i} size={8} style={{ color: '#fbbf24' }} />)}
-                <span className="text-xs ml-1" style={{ color: '#64748b' }}>5.0 rating</span>
+                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>Kelola Limbah Dapurmu 🌿</div>
               </div>
             </div>
-          </div>
-        </motion.div>
-      </div>
+
+            <h2 style={{
+              fontFamily: 'Poppins, sans-serif', fontWeight: 900,
+              fontSize: 38, color: 'white', lineHeight: 1.2, marginBottom: 16,
+            }}>
+              Dapur Bersih,<br />
+              <span style={{
+                background: 'linear-gradient(135deg, #e8834a, #f7c948)',
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+              }}>Bumi Sehat!</span>
+            </h2>
+
+            <p style={{ fontSize: 16, marginBottom: 36, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7 }}>
+              Bergabunglah bersama ribuan ibu rumah tangga yang sudah peduli
+              lingkungan melalui pengelolaan limbah dapur yang cerdas.
+            </p>
+
+            {/* Benefits list */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {benefits.map((b, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 + i * 0.1 }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 12 }}
+                >
+                  <div style={{
+                    width: 24, height: 24, borderRadius: '50%', flexShrink: 0,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: 'rgba(232,131,74,0.2)', border: '1px solid rgba(232,131,74,0.4)',
+                  }}>
+                    <FiCheck size={12} style={{ color: '#f7c948' }} />
+                  </div>
+                  <span style={{ fontSize: 15, color: 'rgba(255,255,255,0.75)', fontWeight: 600 }}>{b}</span>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Social proof */}
+            <div style={{
+              marginTop: 40, display: 'inline-flex', alignItems: 'center', gap: 14,
+              padding: '14px 20px', borderRadius: 20,
+              background: 'rgba(232,131,74,0.08)', border: '1px solid rgba(232,131,74,0.2)',
+            }}>
+              <div style={{ display: 'flex' }}>
+                {['R', 'D', 'A', 'N'].map((l, i) => (
+                  <div key={i} style={{
+                    width: 32, height: 32, borderRadius: '50%', marginLeft: i === 0 ? 0 : -10,
+                    background: `hsl(${i * 30 + 20}, 65%, 55%)`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 12, fontWeight: 900, color: 'white',
+                    border: '2px solid rgba(45,28,14,0.8)',
+                  }}>{l}</div>
+                ))}
+              </div>
+              <div>
+                <p style={{ fontSize: 13, fontWeight: 800, color: 'white' }}>5.000+ ibu sudah bergabung!</p>
+                <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>⭐⭐⭐⭐⭐ 5.0 rating</p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
 
       {/* RIGHT PANEL — Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-12">
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '40px 24px',
+        background: 'var(--bg-main)',
+        minWidth: 0,
+      }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md"
+          style={{ width: '100%', maxWidth: 440 }}
         >
-          {/* Mobile Logo */}
-          <div className="lg:hidden flex items-center gap-2.5 mb-8 justify-center">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}>
-              <span>🌱</span>
+          {/* Mobile Logo — hanya tampil saat panel kiri tidak muncul */}
+          {!isWide && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 32, justifyContent: 'center' }}>
+              <div style={{
+                width: 44, height: 44, borderRadius: 14, fontSize: 22,
+                background: 'linear-gradient(135deg, #e8834a, #f7c948)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 4px 14px rgba(232,131,74,0.35)',
+              }}>🍃</div>
+              <div>
+                <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 19, color: 'var(--text-primary)' }}>
+                  Dapur<span className="gradient-text">Lestari</span>
+                </div>
+                <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600 }}>Kelola Limbah Dapurmu 🌿</div>
+              </div>
             </div>
-            <span className="text-xl font-bold text-white" style={{ fontFamily: 'Space Grotesk' }}>
-              Eco<span className="gradient-text">Wise</span>
-            </span>
-          </div>
+          )}
 
           {/* Mode Switcher */}
-          <div className="flex p-1 rounded-2xl mb-6" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
-            {[['Login', false], ['Create Account', true]].map(([label, toReg]) => (
+          <div style={{
+            display: 'flex', padding: 5, borderRadius: 18, marginBottom: 24,
+            background: 'rgba(232,131,74,0.08)', border: '1.5px solid rgba(232,131,74,0.15)',
+          }}>
+            {[['Masuk', false], ['Daftar Gratis', true]].map(([label, toReg]) => (
               <button
                 key={label}
                 onClick={() => switchMode(toReg)}
-                className="flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-200"
-                style={isRegister === toReg
-                  ? { background: 'linear-gradient(135deg, #22c55e, #16a34a)', color: 'white', boxShadow: '0 4px 15px rgba(34,197,94,0.3)' }
-                  : { color: '#475569' }
-                }
+                style={{
+                  flex: 1, padding: '11px 16px', borderRadius: 14, fontSize: 14, fontWeight: 800,
+                  cursor: 'pointer', border: 'none', fontFamily: 'Nunito, sans-serif',
+                  transition: 'all 0.2s',
+                  ...(isRegister === toReg
+                    ? { background: 'linear-gradient(135deg, #e8834a, #c96a30)', color: 'white', boxShadow: '0 4px 14px rgba(232,131,74,0.35)' }
+                    : { background: 'transparent', color: 'var(--text-muted)' })
+                }}
               >
                 {label}
               </button>
@@ -163,7 +237,7 @@ const AuthPage = () => {
           </div>
 
           {/* Form Card */}
-          <div className="card-glow p-7">
+          <div className="card" style={{ padding: 28, boxShadow: '0 8px 40px rgba(232,131,74,0.1)', border: '1.5px solid rgba(232,131,74,0.2)' }}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={isRegister ? 'register' : 'login'}
@@ -172,127 +246,129 @@ const AuthPage = () => {
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.2 }}
               >
-                <div className="mb-6">
-                  <h1 className="text-xl font-bold text-white" style={{ fontFamily: 'Space Grotesk' }}>
-                    {isRegister ? 'Create your account' : 'Welcome back'}
+                <div style={{ marginBottom: 24 }}>
+                  <h1 style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--text-primary)' }}>
+                    {isRegister ? '🌿 Buat Akun Baru' : '👋 Selamat Datang Kembali!'}
                   </h1>
-                  <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
-                    {isRegister ? 'Start your eco journey in seconds' : 'Continue your eco journey'}
+                  <p style={{ fontSize: 14, marginTop: 6, color: 'var(--text-muted)', fontWeight: 600 }}>
+                    {isRegister
+                      ? 'Bergabung dan mulai perjalanan dapur hijau Anda!'
+                      : 'Lanjutkan perjalanan dapur ramah lingkungan Anda!'}
                   </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                   {isRegister && (
-                    <div className="relative">
-                      <FiUser className="absolute left-3.5 top-1/2 -translate-y-1/2" size={15} style={{ color: '#475569' }} />
+                    <div style={{ position: 'relative' }}>
+                      <FiUser style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} size={16} />
                       <input
-                        type="text"
-                        name="name"
-                        value={form.name}
-                        onChange={handleChange}
-                        placeholder="Full Name"
-                        className="input-field pl-10"
-                        required
-                        autoComplete="name"
+                        type="text" name="name" value={form.name} onChange={handleChange}
+                        placeholder="Nama lengkap Anda"
+                        className="input-field" style={{ paddingLeft: 44 }}
+                        required autoComplete="name"
                       />
                     </div>
                   )}
 
-                  <div className="relative">
-                    <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2" size={15} style={{ color: '#475569' }} />
+                  <div style={{ position: 'relative' }}>
+                    <FiMail style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} size={16} />
                     <input
-                      type="email"
-                      name="email"
-                      value={form.email}
-                      onChange={handleChange}
-                      placeholder="Email Address"
-                      className="input-field pl-10"
-                      required
-                      autoComplete="email"
+                      type="email" name="email" value={form.email} onChange={handleChange}
+                      placeholder="Alamat email Anda"
+                      className="input-field" style={{ paddingLeft: 44 }}
+                      required autoComplete="email"
                     />
                   </div>
 
-                  <div className="relative">
-                    <FiLock className="absolute left-3.5 top-1/2 -translate-y-1/2" size={15} style={{ color: '#475569' }} />
+                  <div style={{ position: 'relative' }}>
+                    <FiLock style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} size={16} />
                     <input
                       type={showPassword ? 'text' : 'password'}
-                      name="password"
-                      value={form.password}
-                      onChange={handleChange}
-                      placeholder={isRegister ? 'Password (min 6 chars)' : 'Password'}
-                      className="input-field pl-10 pr-11"
+                      name="password" value={form.password} onChange={handleChange}
+                      placeholder={isRegister ? 'Buat password (min 6 karakter)' : 'Password Anda'}
+                      className="input-field" style={{ paddingLeft: 44, paddingRight: 48 }}
                       required
                       autoComplete={isRegister ? 'new-password' : 'current-password'}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors"
-                      style={{ color: '#475569' }}
-                      onMouseEnter={e => e.currentTarget.style.color = '#94a3b8'}
-                      onMouseLeave={e => e.currentTarget.style.color = '#475569'}
+                      style={{
+                        position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)',
+                        background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)',
+                        padding: 4, display: 'flex', alignItems: 'center',
+                      }}
                     >
-                      {showPassword ? <FiEyeOff size={15} /> : <FiEye size={15} />}
+                      {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
                     </button>
                   </div>
 
-                  {/* Error */}
+                  {/* Error message */}
                   <AnimatePresence>
                     {error && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="px-4 py-3 rounded-xl text-sm"
                         style={{
-                          background: 'rgba(248,113,113,0.08)',
-                          border: '1px solid rgba(248,113,113,0.25)',
-                          color: '#fca5a5'
+                          padding: '12px 16px', borderRadius: 14, fontSize: 13, fontWeight: 700,
+                          background: 'rgba(241,112,112,0.08)', border: '1.5px solid rgba(241,112,112,0.3)',
+                          color: '#c03a3a',
                         }}
                       >
-                        {error}
+                        ⚠️ {error}
                       </motion.div>
                     )}
                   </AnimatePresence>
 
-                  {/* Submit */}
+                  {/* Submit button */}
                   <motion.button
                     type="submit"
                     disabled={loading}
                     whileHover={{ scale: loading ? 1 : 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="btn-primary w-full justify-center py-3 text-sm mt-2"
-                    style={{ opacity: loading ? 0.75 : 1 }}
+                    className="btn-primary"
+                    style={{ justifyContent: 'center', fontSize: 15, padding: '14px 24px', marginTop: 4, opacity: loading ? 0.75 : 1 }}
                   >
                     {loading ? (
                       <>
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        {isRegister ? 'Creating Account...' : 'Signing In...'}
+                        <div style={{
+                          width: 18, height: 18,
+                          border: '2.5px solid rgba(255,255,255,0.4)', borderTopColor: 'white',
+                          borderRadius: '50%', animation: 'spin 0.8s linear infinite',
+                        }} />
+                        {isRegister ? 'Membuat Akun...' : 'Masuk...'}
                       </>
                     ) : (
                       <>
-                        {isRegister ? 'Create Account' : 'Sign In'}
-                        <FiArrowRight size={14} />
+                        {isRegister ? '🎉 Daftar Sekarang' : '🚀 Masuk ke Dapur'}
+                        <FiArrowRight size={16} />
                       </>
                     )}
                   </motion.button>
                 </form>
 
                 {/* Divider */}
-                <div className="flex items-center gap-3 my-5">
-                  <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.06)' }} />
-                  <span className="text-xs" style={{ color: 'var(--text-muted)' }}>or</span>
-                  <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.06)' }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '20px 0' }}>
+                  <div style={{ flex: 1, height: 1, background: 'rgba(232,131,74,0.15)' }} />
+                  <span style={{ fontSize: 12, color: 'var(--text-muted)', fontWeight: 700 }}>atau</span>
+                  <div style={{ flex: 1, height: 1, background: 'rgba(232,131,74,0.15)' }} />
                 </div>
 
                 <button
                   onClick={() => switchMode(!isRegister)}
-                  className="w-full py-2.5 text-sm text-center transition-colors rounded-xl"
-                  style={{ color: 'var(--text-muted)' }}
-                  onMouseEnter={e => e.currentTarget.style.color = '#4ade80'}
+                  style={{
+                    width: '100%', padding: '11px', fontSize: 14, fontWeight: 700,
+                    textAlign: 'center', background: 'none', border: 'none', cursor: 'pointer',
+                    color: 'var(--text-muted)', fontFamily: 'Nunito, sans-serif',
+                    borderRadius: 12, transition: 'color 0.2s',
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.color = 'var(--primary)'}
                   onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
                 >
-                  {isRegister ? 'Already have an account? Sign in →' : "Don't have an account? Sign up →"}
+                  {isRegister
+                    ? 'Sudah punya akun? Masuk di sini →'
+                    : 'Belum punya akun? Daftar gratis →'}
                 </button>
               </motion.div>
             </AnimatePresence>

@@ -1,29 +1,108 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiBarChart2, FiZap, FiAward, FiUsers, FiTrendingDown, FiCpu, FiCheck } from 'react-icons/fi';
+import { FiArrowRight, FiCheck } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 
 const features = [
-  { icon: <FiCpu />, title: 'AI Waste Prediction', desc: 'Linear Regression model analyzes your patterns and forecasts future trends 7 days ahead.', color: '#22c55e', tag: 'AI / ML' },
-  { icon: <FiZap />, title: 'Smart Recommendations', desc: 'Personalized eco-tips matched to your consumption patterns — 15 categories.', color: '#818cf8', tag: 'Personalized' },
-  { icon: <FiAward />, title: 'Gamification & Badges', desc: 'Earn badges, build streaks, and climb the leaderboard as you build green habits.', color: '#f59e0b', tag: 'Gamified' },
-  { icon: <FiBarChart2 />, title: 'Trend Analytics', desc: 'Beautiful charts showing waste, energy, and water consumption over time.', color: '#22d3ee', tag: 'Analytics' },
-  { icon: <FiUsers />, title: 'Community Rankings', desc: 'Compete with other eco-warriors and get inspired to do better every day.', color: '#f87171', tag: 'Social' },
-  { icon: <FiTrendingDown />, title: 'Daily Eco Logging', desc: 'Quickly log your daily footprint in under a minute — waste, energy, water, transport.', color: '#a78bfa', tag: 'Tracking' },
+  {
+    emoji: '🤖',
+    title: 'Prediksi Limbah AI',
+    desc: 'AI canggih memprediksi limbah dapur Anda 7 hari ke depan, bantu rencanakan masak lebih hemat.',
+    color: '#e8834a',
+    tag: 'Teknologi AI',
+  },
+  {
+    emoji: '💡',
+    title: 'Tips Dapur Cerdas',
+    desc: 'Rekomendasi personal cara mengurangi sisa makanan, mulai dari belanja, masak, sampai simpan.',
+    color: '#5cb285',
+    tag: 'Personal',
+  },
+  {
+    emoji: '🏆',
+    title: 'Sistem Pencapaian',
+    desc: 'Kumpulkan bintang & lencana saat berhasil mengurangi limbah. Jadikan kegiatan dapur lebih menyenangkan!',
+    color: '#f7c948',
+    tag: 'Gamifikasi',
+  },
+  {
+    emoji: '📊',
+    title: 'Grafik Progres',
+    desc: 'Lihat tren limbah dapur minggu ini vs bulan lalu dengan grafik yang mudah dipahami.',
+    color: '#45b7a0',
+    tag: 'Analitik',
+  },
+  {
+    emoji: '🌟',
+    title: 'Papan Nilai Komunitas',
+    desc: 'Bersaing bersama ibu-ibu lain dan saling semangat untuk dapur yang lebih ramah lingkungan.',
+    color: '#9b7fe8',
+    tag: 'Komunitas',
+  },
+  {
+    emoji: '📝',
+    title: 'Catat Limbah Harian',
+    desc: 'Catat limbah dapur harian kurang dari 1 menit — sisa sayur, buah, nasi, dan bahan masak lainnya.',
+    color: '#f17070',
+    tag: 'Mudah',
+  },
 ];
 
-const stats = [
-  { value: '30%', label: 'Avg. Waste Reduction', icon: '♻️' },
-  { value: '15K+', label: 'Active Users', icon: '🌍' },
-  { value: '2.5T', label: 'CO₂ Saved (kg)', icon: '🌿' },
-  { value: '98%', label: 'Satisfaction Rate', icon: '⭐' },
+// Data sampah Indonesia dari KLHK / SIPSN 2023
+const indonesiaWasteFacts = [
+  {
+    value: '67,8 Jt',
+    unit: 'ton/tahun',
+    label: 'Total Sampah Indonesia',
+    detail: 'Indonesia menghasilkan ~67,8 juta ton sampah per tahun (SIPSN 2023)',
+    emoji: '🗑️',
+    color: '#e8834a',
+    bg: 'rgba(232,131,74,0.08)',
+    border: 'rgba(232,131,74,0.2)',
+  },
+  {
+    value: '44,5%',
+    unit: 'dari total',
+    label: 'Sampah Sisa Makanan',
+    detail: 'Hampir separuh sampah Indonesia adalah sisa makanan dari rumah tangga',
+    emoji: '🍚',
+    color: '#5cb285',
+    bg: 'rgba(92,178,133,0.08)',
+    border: 'rgba(92,178,133,0.2)',
+  },
+  {
+    value: '13,6%',
+    unit: 'saja',
+    label: 'Sampah Terkelola Baik',
+    detail: 'Hanya 13,6% sampah yang dikelola dengan benar — sisanya berakhir di TPA atau dibakar',
+    emoji: '⚠️',
+    color: '#f17070',
+    bg: 'rgba(241,112,112,0.08)',
+    border: 'rgba(241,112,112,0.2)',
+  },
+  {
+    value: '4,6 Jt',
+    unit: 'ton/tahun',
+    label: 'Sampah Tak Terangkut',
+    detail: 'Jutaan ton sampah tidak terangkut dan mencemari lingkungan setiap tahunnya',
+    emoji: '🌊',
+    color: '#45b7a0',
+    bg: 'rgba(69,183,160,0.08)',
+    border: 'rgba(69,183,160,0.2)',
+  },
 ];
 
 const howItWorks = [
-  { step: '01', title: 'Create Account', desc: 'Sign up for free and set up your eco-profile in 30 seconds.' },
-  { step: '02', title: 'Log Daily Data', desc: 'Submit your waste, energy, water, and transport every day.' },
-  { step: '03', title: 'Get AI Insights', desc: 'Our AI analyzes your patterns and predicts your future footprint.' },
-  { step: '04', title: 'Earn & Improve', desc: 'Collect badges, climb the leaderboard, and reduce your impact.' },
+  { step: '1', emoji: '📱', title: 'Daftar Gratis', desc: 'Buat akun dalam 30 detik, cukup nama dan email Anda.' },
+  { step: '2', emoji: '🗑️', title: 'Catat Limbah Dapur', desc: 'Setiap hari, catat sisa makanan dari dapur Anda — mudah sekali!' },
+  { step: '3', emoji: '🤖', title: 'Dapat Analisis AI', desc: 'AI kami menganalisis pola Anda dan memberikan prediksi serta saran.' },
+  { step: '4', emoji: '🏆', title: 'Kumpulkan Bintang', desc: 'Dapatkan poin & lencana. Semakin sedikit limbah, semakin banyak hadiah!' },
+];
+
+const testimonials = [
+  { name: 'Bu Ratna', location: 'Jakarta', text: 'Sekarang belanja lebih terencana, sisa makanan berkurang 40%. Anak-anak juga ikutan semangat!', avatar: 'R' },
+  { name: 'Bu Dewi', location: 'Surabaya', text: 'Tips dapurnya sangat praktis. Saya jadi tahu cara simpan bahan makanan yang benar!', avatar: 'D' },
+  { name: 'Bu Sari', location: 'Bandung', text: 'Aplikasi ini seperti punya asisten dapur sendiri. Grafik progresnya bikin semangat!', avatar: 'S' },
 ];
 
 const LandingPage = () => {
@@ -31,36 +110,46 @@ const LandingPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div style={{ background: 'var(--bg-dark)', minHeight: '100vh' }}>
+    <div style={{ background: 'var(--bg-main)', minHeight: '100vh' }}>
 
       {/* ── Navbar ── */}
-      <nav className="glass sticky top-0 z-50" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}>
-              <span className="text-sm">🌱</span>
+      <nav className="glass sticky top-0 z-50">
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 68 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 42, height: 42, borderRadius: 14,
+              background: 'linear-gradient(135deg, #e8834a, #f7c948)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 22, boxShadow: '0 4px 12px rgba(232,131,74,0.35)'
+            }}>🍃</div>
+            <div>
+              <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 17, color: 'var(--text-primary)' }}>
+                Dapur<span className="gradient-text">Lestari</span>
+              </div>
+              <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600 }}>
+                Kelola Limbah Dapurmu 🌿
+              </div>
             </div>
-            <span className="font-bold text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              Eco<span className="gradient-text">Wise</span>
-            </span>
           </div>
-          <div className="flex items-center gap-3">
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             {isAuthenticated ? (
-              <button onClick={() => navigate('/dashboard')} className="btn-primary text-sm px-4 py-2">
-                Dashboard <FiArrowRight size={14} />
+              <button onClick={() => navigate('/dashboard')} className="btn-primary" style={{ fontSize: 14, padding: '10px 20px' }}>
+                Masuk Beranda <FiArrowRight size={14} />
               </button>
             ) : (
               <>
-                <Link to="/auth" className="text-sm font-medium transition-colors no-underline"
-                  style={{ color: 'var(--text-secondary)' }}
-                  onMouseEnter={e => e.target.style.color = 'white'}
-                  onMouseLeave={e => e.target.style.color = 'var(--text-secondary)'}
+                <Link to="/auth" className="no-underline" style={{
+                  fontSize: 14, fontWeight: 700, color: 'var(--text-secondary)',
+                  padding: '10px 16px', borderRadius: 12, transition: 'all 0.2s',
+                }}
+                  onMouseEnter={e => e.currentTarget.style.color = 'var(--primary)'}
+                  onMouseLeave={e => e.currentTarget.style.color = 'var(--text-secondary)'}
                 >
-                  Sign In
+                  Masuk
                 </Link>
-                <Link to="/auth?mode=register" className="btn-primary text-sm px-4 py-2 no-underline">
-                  Get Started <FiArrowRight size={14} />
+                <Link to="/auth?mode=register" className="btn-primary no-underline" style={{ fontSize: 14, padding: '10px 20px' }}>
+                  Mulai Gratis <FiArrowRight size={14} />
                 </Link>
               </>
             )}
@@ -69,120 +158,213 @@ const LandingPage = () => {
       </nav>
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden pt-28 pb-24 px-4">
-        {/* BG blobs */}
-        <div className="hero-blob" style={{ width: 600, height: 600, top: '-200px', left: '50%', transform: 'translateX(-50%)', background: 'radial-gradient(circle, rgba(34,197,94,0.08), transparent 70%)' }} />
-        <div className="hero-blob" style={{ width: 400, height: 400, bottom: '-100px', right: '10%', background: 'radial-gradient(circle, rgba(129,140,248,0.06), transparent 70%)' }} />
+      <section style={{ position: 'relative', overflow: 'hidden', padding: '80px 20px 80px' }}>
+        {/* BG decorations */}
+        <div className="hero-blob" style={{ width: 600, height: 600, top: '-200px', left: '50%', transform: 'translateX(-50%)', background: 'radial-gradient(circle, rgba(232,131,74,0.08), transparent 70%)' }} />
+        <div className="hero-blob" style={{ width: 400, height: 400, bottom: '-100px', right: '5%', background: 'radial-gradient(circle, rgba(92,178,133,0.06), transparent 70%)' }} />
 
-        <div className="max-w-4xl mx-auto text-center relative z-10">
+        {/* Floating kitchen items */}
+        <div style={{ position: 'absolute', top: '15%', right: '8%', fontSize: 48, opacity: 0.15, transform: 'rotate(20deg)' }}>🥦</div>
+        <div style={{ position: 'absolute', top: '40%', left: '5%', fontSize: 40, opacity: 0.12, transform: 'rotate(-15deg)' }}>🍅</div>
+        <div style={{ position: 'absolute', bottom: '20%', right: '15%', fontSize: 36, opacity: 0.1, transform: 'rotate(10deg)' }}>🥕</div>
+
+        <div style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 10 }}>
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-            {/* Pill badge */}
+            {/* Badge */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-8"
-              style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.25)', color: '#4ade80' }}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                padding: '8px 18px', borderRadius: 50, marginBottom: 28,
+                background: 'rgba(232,131,74,0.1)', border: '1.5px solid rgba(232,131,74,0.3)',
+                color: 'var(--primary)', fontSize: 13, fontWeight: 700
+              }}
             >
               <div className="dot-live" />
-              AI-Powered Sustainable Living Platform
+              Platform Pengelolaan Limbah Dapur Berbasis AI 🍃
             </motion.div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black mb-6 leading-tight tracking-tight"
-              style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              Live{' '}
-              <span className="gradient-text-hero">Greener,</span>
-              <br />
-              Track Smarter
+            <h1 style={{
+              fontFamily: 'Poppins, sans-serif', fontWeight: 900,
+              fontSize: 'clamp(36px, 6vw, 64px)', marginBottom: 20,
+              lineHeight: 1.15, color: 'var(--text-primary)'
+            }}>
+              Dapur Bersih,{' '}
+              <span className="gradient-text-hero">Lingkungan Sehat</span>
+              <br />Bersama <span className="gradient-text">DapurLestari!</span>
             </h1>
 
-            <p className="text-lg sm:text-xl mb-10 max-w-2xl mx-auto leading-relaxed"
-              style={{ color: 'var(--text-secondary)' }}>
-              EcoWise uses AI to analyze your daily habits, predict your environmental impact,
-              and give you personalized tips to reduce your ecological footprint.
+            <p style={{
+              fontSize: 18, marginBottom: 36, maxWidth: 560, margin: '0 auto 36px',
+              color: 'var(--text-secondary)', lineHeight: 1.7
+            }}>
+              Bantu ibu rumah tangga mengelola limbah dapur dengan lebih cerdas.
+              Catat sisa makanan, dapat tips hemat, dan bersaing dalam komunitas ibu-ibu peduli lingkungan! 🌍
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center', marginBottom: 32 }}>
               <motion.button
-                whileHover={{ scale: 1.04 }}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.96 }}
                 onClick={() => navigate('/auth?mode=register')}
-                className="btn-primary text-base px-8 py-3.5"
+                className="btn-primary"
+                style={{ fontSize: 16, padding: '14px 32px', borderRadius: 18 }}
               >
-                Start for Free <FiArrowRight />
+                Mulai Gratis Sekarang 🎉
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.04 }}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.96 }}
                 onClick={() => navigate('/auth')}
-                className="btn-secondary text-base px-8 py-3.5"
+                className="btn-secondary"
+                style={{ fontSize: 16, padding: '14px 32px', borderRadius: 18 }}
               >
-                Sign In
+                Sudah Punya Akun? Masuk
               </motion.button>
             </div>
 
-            {/* Social proof */}
-            <div className="flex items-center justify-center gap-1.5 mt-8">
-              {['E', 'A', 'R', 'J', 'M'].map((l, i) => (
-                <div key={i} className="w-7 h-7 rounded-full border-2 flex items-center justify-center text-xs font-bold -ml-1 first:ml-0"
-                  style={{
-                    background: `hsl(${i * 50 + 120}, 60%, 35%)`,
-                    borderColor: 'var(--bg-dark)'
-                  }}>
-                  {l}
-                </div>
-              ))}
-              <span className="text-sm ml-2" style={{ color: 'var(--text-secondary)' }}>
-                Join <strong className="text-white">15,000+</strong> eco-warriors
-              </span>
+            {/* Source tag */}
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '7px 16px', borderRadius: 50, marginTop: 4,
+              background: 'rgba(92,178,133,0.1)', border: '1.5px solid rgba(92,178,133,0.25)',
+              color: '#3d8f61', fontSize: 12, fontWeight: 700
+            }}>
+              📊 Data berdasarkan KLHK & SIPSN 2023 — Yuk jadi bagian dari solusi!
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* ── Stats ── */}
-      <section className="py-14 px-4" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
-          {stats.map((s, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="text-center"
-            >
-              <div className="text-3xl mb-2">{s.icon}</div>
-              <div className="text-3xl sm:text-4xl font-black gradient-text mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                {s.value}
+      {/* ── Fakta Sampah Indonesia ── */}
+      <section style={{
+        padding: '72px 20px',
+        borderTop: '1px solid rgba(232,131,74,0.1)',
+        borderBottom: '1px solid rgba(232,131,74,0.1)',
+        background: 'linear-gradient(180deg, rgba(255,250,245,0.8), rgba(255,247,237,0.6))'
+      }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          {/* Section title */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            style={{ textAlign: 'center', marginBottom: 48 }}
+          >
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '6px 16px', borderRadius: 50, marginBottom: 16,
+              background: 'rgba(241,112,112,0.08)', border: '1.5px solid rgba(241,112,112,0.25)',
+              color: '#c03a3a', fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em'
+            }}>
+              📊 Fakta Sampah Indonesia
+            </div>
+            <h2 style={{
+              fontFamily: 'Poppins, sans-serif', fontWeight: 800,
+              fontSize: 'clamp(24px, 3.5vw, 36px)', color: 'var(--text-primary)', marginBottom: 12
+            }}>
+              Masalah Nyata yang Butuh{' '}
+              <span className="gradient-text">Solusi Nyata</span>
+            </h2>
+            <p style={{ fontSize: 14, color: 'var(--text-muted)', fontWeight: 600, maxWidth: 480, margin: '0 auto' }}>
+              Data resmi dari Kementerian Lingkungan Hidup & Kehutanan (KLHK) dan SIPSN 2023
+            </p>
+          </motion.div>
+
+          {/* Fact cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 20, marginBottom: 36 }}>
+            {indonesiaWasteFacts.map((fact, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                style={{
+                  borderRadius: 20, padding: '24px 20px',
+                  background: fact.bg, border: `1.5px solid ${fact.border}`,
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                }}
+                whileHover={{ y: -4, boxShadow: `0 12px 32px ${fact.border}` }}
+              >
+                <div style={{ fontSize: 36, marginBottom: 14 }}>{fact.emoji}</div>
+                <div style={{
+                  fontFamily: 'Poppins, sans-serif', fontWeight: 900,
+                  fontSize: 34, color: fact.color, lineHeight: 1, marginBottom: 2
+                }}>
+                  {fact.value}
+                </div>
+                <div style={{ fontSize: 12, fontWeight: 700, color: fact.color, opacity: 0.7, marginBottom: 8 }}>
+                  {fact.unit}
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 8 }}>
+                  {fact.label}
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.55, fontWeight: 600 }}>
+                  {fact.detail}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Call to action banner */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            style={{
+              borderRadius: 20, padding: '20px 28px',
+              background: 'rgba(232,131,74,0.06)', border: '1.5px solid rgba(232,131,74,0.2)',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              flexWrap: 'wrap', gap: 16
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              <span style={{ fontSize: 36 }}>🏠</span>
+              <div>
+                <p style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: 15, marginBottom: 4 }}>
+                  Rumah Tangga adalah Sumber Terbesar Sampah Indonesia
+                </p>
+                <p style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 600 }}>
+                  Sebagai ibu rumah tangga, Anda memegang kunci perubahan — mulai dari dapur sendiri!
+                </p>
               </div>
-              <div className="text-sm" style={{ color: 'var(--text-muted)' }}>{s.label}</div>
-            </motion.div>
-          ))}
+            </div>
+            <div style={{
+              padding: '10px 20px', borderRadius: 14, fontSize: 13, fontWeight: 800,
+              background: 'linear-gradient(135deg, #e8834a, #f7c948)', color: 'white',
+              whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(232,131,74,0.3)'
+            }}>
+              Sumber: KLHK & SIPSN 2023 📊
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* ── Features ── */}
-      <section className="py-24 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <p className="text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: '#22c55e' }}>Features</p>
-              <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                Everything You Need to Go{' '}
-                <span className="gradient-text">Green</span>
+      <section style={{ padding: '80px 20px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <p style={{ fontSize: 13, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--primary)', marginBottom: 12 }}>
+                🌟 Fitur Unggulan
+              </p>
+              <h2 style={{
+                fontFamily: 'Poppins, sans-serif', fontWeight: 800,
+                fontSize: 'clamp(28px, 4vw, 40px)', color: 'var(--text-primary)', marginBottom: 16
+              }}>
+                Semua yang Ibu Butuhkan untuk{' '}
+                <span className="gradient-text">Dapur Ramah Lingkungan</span>
               </h2>
-              <p className="max-w-xl mx-auto" style={{ color: 'var(--text-secondary)' }}>
-                A comprehensive toolkit for tracking, analyzing, and improving your environmental impact.
+              <p style={{ maxWidth: 500, margin: '0 auto', color: 'var(--text-secondary)', fontSize: 15, lineHeight: 1.7 }}>
+                Dirancang khusus untuk ibu rumah tangga — mudah digunakan, bahasa Indonesia, dan menyenangkan!
               </p>
             </motion.div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
             {features.map((feat, i) => (
               <motion.div
                 key={i}
@@ -190,19 +372,31 @@ const LandingPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
-                className="card group p-6"
+                className="card group"
+                style={{ padding: 24 }}
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="icon-box" style={{ background: `${feat.color}15`, color: feat.color }}>
-                    {feat.icon}
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 }}>
+                  <div style={{
+                    width: 52, height: 52, borderRadius: 16,
+                    background: `${feat.color}15`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 26
+                  }}>
+                    {feat.emoji}
                   </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full"
-                    style={{ background: `${feat.color}12`, color: feat.color, border: `1px solid ${feat.color}25` }}>
+                  <span style={{
+                    fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 50,
+                    background: `${feat.color}12`, color: feat.color, border: `1px solid ${feat.color}25`
+                  }}>
                     {feat.tag}
                   </span>
                 </div>
-                <h3 className="font-bold text-white mb-2 text-base group-hover:gradient-text transition-all">{feat.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>{feat.desc}</p>
+                <h3 style={{ fontWeight: 800, color: 'var(--text-primary)', marginBottom: 8, fontSize: 16 }}>
+                  {feat.title}
+                </h3>
+                <p style={{ fontSize: 14, lineHeight: 1.65, color: 'var(--text-secondary)' }}>
+                  {feat.desc}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -210,15 +404,24 @@ const LandingPage = () => {
       </section>
 
       {/* ── How It Works ── */}
-      <section className="py-24 px-4" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: '#818cf8' }}>How It Works</p>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              Get Started in <span className="gradient-text-purple">4 Steps</span>
+      <section style={{
+        padding: '80px 20px',
+        borderTop: '1px solid rgba(232,131,74,0.1)',
+        background: 'linear-gradient(180deg, rgba(232,131,74,0.03), rgba(247,201,72,0.04))'
+      }}>
+        <div style={{ maxWidth: 960, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <p style={{ fontSize: 13, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#5cb285', marginBottom: 12 }}>
+              ✨ Cara Kerja
+            </p>
+            <h2 style={{
+              fontFamily: 'Poppins, sans-serif', fontWeight: 800,
+              fontSize: 'clamp(28px, 4vw, 40px)', color: 'var(--text-primary)'
+            }}>
+              Mulai dalam <span className="gradient-text-green">4 Langkah Mudah</span>
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20 }}>
             {howItWorks.map((step, i) => (
               <motion.div
                 key={i}
@@ -226,18 +429,70 @@ const LandingPage = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.12 }}
-                className="relative"
+                className="card"
+                style={{ padding: 22, textAlign: 'center' }}
               >
-                {i < howItWorks.length - 1 && (
-                  <div className="hidden lg:block absolute top-6 left-full w-full h-px z-0"
-                    style={{ background: 'linear-gradient(90deg, rgba(34,197,94,0.3), transparent)' }} />
-                )}
-                <div className="card p-5 relative z-10">
-                  <div className="text-3xl font-black mb-3" style={{ color: 'rgba(34,197,94,0.3)', fontFamily: 'Space Grotesk' }}>
-                    {step.step}
+                <div style={{ fontSize: 40, marginBottom: 14 }}>{step.emoji}</div>
+                <div style={{
+                  width: 28, height: 28, borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #e8834a, #f7c948)',
+                  color: 'white', fontWeight: 900, fontSize: 13,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  margin: '0 auto 12px', boxShadow: '0 3px 10px rgba(232,131,74,0.3)'
+                }}>
+                  {step.step}
+                </div>
+                <h3 style={{ fontWeight: 800, color: 'var(--text-primary)', marginBottom: 8 }}>
+                  {step.title}
+                </h3>
+                <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                  {step.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Testimonials ── */}
+      <section style={{ padding: '80px 20px' }}>
+        <div style={{ maxWidth: 960, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <p style={{ fontSize: 13, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#9b7fe8', marginBottom: 12 }}>
+              💬 Kata Mereka
+            </p>
+            <h2 style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 'clamp(26px, 4vw, 36px)', color: 'var(--text-primary)' }}>
+              Ibu-Ibu Hebat yang Sudah Bergabung
+            </h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20 }}>
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="card"
+                style={{ padding: 24 }}
+              >
+                <div style={{ fontSize: 24, marginBottom: 12 }}>⭐⭐⭐⭐⭐</div>
+                <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 16, fontStyle: 'italic' }}>
+                  "{t.text}"
+                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{
+                    width: 36, height: 36, borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #e8834a, #5cb285)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontWeight: 900, fontSize: 14, color: 'white'
+                  }}>
+                    {t.avatar}
                   </div>
-                  <h3 className="font-bold text-white mb-2">{step.title}</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>{step.desc}</p>
+                  <div>
+                    <p style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: 14 }}>{t.name}</p>
+                    <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>📍 {t.location}</p>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -246,39 +501,42 @@ const LandingPage = () => {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-24 px-4">
-        <div className="max-w-3xl mx-auto">
+      <section style={{ padding: '80px 20px', background: 'rgba(232,131,74,0.03)' }}>
+        <div style={{ maxWidth: 700, margin: '0 auto' }}>
           <motion.div
             initial={{ opacity: 0, scale: 0.97 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             className="gradient-border"
           >
-            <div className="card text-center rounded-2xl py-16 px-8">
-              <div className="text-5xl mb-5 animate-float">🌍</div>
-              <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                Ready to Make a Difference?
+            <div className="card" style={{ textAlign: 'center', borderRadius: 24, padding: '64px 40px' }}>
+              <div style={{ fontSize: 56, marginBottom: 20 }} className="animate-float">🍃</div>
+              <h2 style={{
+                fontFamily: 'Poppins, sans-serif', fontWeight: 800,
+                fontSize: 'clamp(26px, 4vw, 36px)', marginBottom: 16, color: 'var(--text-primary)'
+              }}>
+                Siap Membuat Dapur Lebih Ramah Lingkungan?
               </h2>
-              <p className="mb-8 max-w-md mx-auto" style={{ color: 'var(--text-secondary)' }}>
-                Join thousands of eco-warriors already tracking and reducing their environmental impact with AI.
+              <p style={{ marginBottom: 28, maxWidth: 480, margin: '0 auto 28px', color: 'var(--text-secondary)', fontSize: 15, lineHeight: 1.7 }}>
+                Bergabunglah bersama ribuan ibu rumah tangga yang sudah berhasil mengurangi limbah dapur mereka bersama DapurLestari!
               </p>
 
-              {/* Benefits */}
-              <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
-                {['Free forever', 'No credit card', 'AI-powered'].map(b => (
-                  <div key={b} className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
-                    <FiCheck size={14} style={{ color: '#22c55e' }} /> {b}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center', marginBottom: 24 }}>
+                {['Gratis Selamanya', 'Tanpa Ribet', 'Bahasa Indonesia', 'Ramah Pemula'].map(b => (
+                  <div key={b} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--text-secondary)', fontWeight: 600 }}>
+                    <FiCheck size={14} style={{ color: '#5cb285' }} /> {b}
                   </div>
                 ))}
               </div>
 
               <motion.button
-                whileHover={{ scale: 1.04 }}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.96 }}
                 onClick={() => navigate('/auth?mode=register')}
-                className="btn-primary text-base px-10 py-3.5"
+                className="btn-primary"
+                style={{ fontSize: 16, padding: '14px 36px', borderRadius: 18 }}
               >
-                Join EcoWise Today <FiArrowRight />
+                Daftar Sekarang — Gratis! 🎉
               </motion.button>
             </div>
           </motion.div>
@@ -286,16 +544,22 @@ const LandingPage = () => {
       </section>
 
       {/* ── Footer ── */}
-      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }} className="py-10 px-4">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}>
-              <span className="text-xs">🌱</span>
+      <footer style={{ borderTop: '1px solid rgba(232,131,74,0.1)', padding: '40px 20px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 36, height: 36, borderRadius: 12,
+              background: 'linear-gradient(135deg, #e8834a, #f7c948)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18
+            }}>🍃</div>
+            <div>
+              <span style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, color: 'var(--text-primary)', fontSize: 16 }}>
+                Dapur<span className="gradient-text">Lestari</span>
+              </span>
             </div>
-            <span className="font-bold text-white" style={{ fontFamily: 'Space Grotesk' }}>EcoWise</span>
           </div>
-          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-            © 2024 EcoWise — Building a sustainable future, one log at a time.
+          <p style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 600 }}>
+            © 2024 DapurLestari — Untuk ibu yang peduli lingkungan 💚
           </p>
         </div>
       </footer>

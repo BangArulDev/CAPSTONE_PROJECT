@@ -25,6 +25,67 @@
         "first_log"
       ],
       "createdAt": "2026-04-21T07:11:53.025Z"
+    },
+    {
+      "id": "e4c16a23-43e0-431d-8e3d-8a79c47b92ac",
+      "name": "badak",
+      "email": "badak@gmail.com",
+      "password": "$2b$10$q2wgcnp/UqNN9aIfp755rOI9JGJu4vxtdLBkWZML3/0TsrS//koHO",
+      "ecoPoints": 90,
+      "streak": 1,
+      "lastLogDate": "2026-05-01",
+      "badges": [
+        "first_log"
+      ],
+      "createdAt": "2026-05-01T06:32:22.916Z"
+    },
+    {
+      "id": "c4da9f10-98f2-430d-8ca1-5bb0ea0cc788",
+      "name": "amrully arun hadi",
+      "email": "okbolo@gmail.com",
+      "password": "$2b$10$xgGXAVnBTkaGhNTrscoj3.Rw5fBhu5jaok0kpNIl72S0sDxmqEgOS",
+      "ecoPoints": 100,
+      "streak": 1,
+      "lastLogDate": "2026-05-21",
+      "badges": [
+        "first_log"
+      ],
+      "createdAt": "2026-05-21T08:12:06.278Z"
+    },
+    {
+      "id": "227c37e2-5897-4641-9b0e-8ddc64f178de",
+      "name": "Bu Test",
+      "email": "test@dapur.com",
+      "password": "$2b$10$TJPyEbiEA/66MX7FdQQ1ce634Z6V2EdZzOoIEUW9S1TO90vaFJ0mm",
+      "ecoPoints": 0,
+      "streak": 0,
+      "lastLogDate": null,
+      "badges": [],
+      "createdAt": "2026-05-22T08:08:18.987Z"
+    },
+    {
+      "id": "a429b11c-2d74-4740-b632-8ea1450b9ae7",
+      "name": "Bu Sari",
+      "email": "sari@dapur.com",
+      "password": "$2b$10$qacM/mzSOH8BOp2LYDpNuOvlTiOoaizoRUbaF/1m7OKZx9JSRgfLq",
+      "ecoPoints": 0,
+      "streak": 0,
+      "lastLogDate": null,
+      "badges": [],
+      "createdAt": "2026-05-22T08:09:03.366Z"
+    },
+    {
+      "id": "1332ebe0-ac65-4ae5-b9ab-115307bf7ea9",
+      "name": "sri sumarni",
+      "email": "sri@gmail.com",
+      "password": "$2b$10$Xp5SEif.uOejhufRiBp2/.HeVptcS.g.rvxSNMXI0PP/gGrWUwqwK",
+      "ecoPoints": 145,
+      "streak": 1,
+      "lastLogDate": "2026-05-22",
+      "badges": [
+        "first_log"
+      ],
+      "createdAt": "2026-05-22T08:09:58.876Z"
     }
   ]
 }

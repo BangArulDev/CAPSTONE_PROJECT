@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiUsers, FiTrendingUp, FiAward, FiRefreshCw } from 'react-icons/fi';
+import { FiTrendingUp, FiRefreshCw } from 'react-icons/fi';
 import { leaderboardAPI } from '../services/api';
 import Navbar from '../components/Navbar';
 
 const medals = ['🥇', '🥈', '🥉'];
-const rankColors = ['#f59e0b', '#94a3b8', '#f97316'];
+const podiumColors = ['#f7c948', '#b8c0cc', '#e8834a'];
 
 const LeaderboardPage = () => {
   const [data, setData] = useState(null);
@@ -32,90 +32,106 @@ const LeaderboardPage = () => {
   const rest = data?.leaderboard?.slice(3) || [];
 
   return (
-    <div style={{ background: 'var(--bg-dark)', minHeight: '100vh' }}>
+    <div style={{ background: 'var(--bg-main)', minHeight: '100vh' }}>
       <Navbar />
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div style={{ maxWidth: 800, margin: '0 auto', padding: '28px 16px 60px' }}>
 
-        {/* ── Header ── */}
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="icon-box" style={{ background: 'rgba(245,158,11,0.15)', color: '#fbbf24' }}>
-                <FiUsers size={20} />
+        {/* Header */}
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: 28 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{
+                width: 52, height: 52, borderRadius: 16, fontSize: 26,
+                background: 'rgba(247,201,72,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}>
+                🌟
               </div>
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-white" style={{ fontFamily: 'Space Grotesk' }}>
-                  Global Leaderboard
+                <h1 style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 900, fontSize: 'clamp(22px, 4vw, 28px)', color: 'var(--text-primary)' }}>
+                  Papan Nilai Komunitas
                 </h1>
-                <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                  {data?.totalUsers || 0} eco-warriors competing worldwide
+                <p style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 600 }}>
+                  {data?.totalUsers || 0} ibu hebat sedang bersaing mengurangi limbah dapur 👩‍🍳
                 </p>
               </div>
             </div>
             <button
               onClick={() => load(true)}
               disabled={refreshing}
-              className="btn-outline p-2.5"
-              title="Refresh"
+              className="btn-outline"
+              style={{ padding: '10px 14px', gap: 6 }}
             >
-              <FiRefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
+              <FiRefreshCw size={15} style={{ animation: refreshing ? 'spin 0.8s linear infinite' : 'none' }} />
+              Perbarui
             </button>
           </div>
         </motion.div>
 
-        {/* ── Your Rank Banner ── */}
+        {/* Your Rank Banner */}
         {data?.currentUserRank && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 p-4 rounded-2xl flex items-center justify-between"
             style={{
-              background: 'linear-gradient(135deg, rgba(34,197,94,0.08), rgba(34,197,94,0.04))',
-              border: '1px solid rgba(34,197,94,0.25)',
-              boxShadow: '0 0 30px rgba(34,197,94,0.06)'
+              marginBottom: 24, padding: '16px 20px', borderRadius: 20,
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12,
+              background: 'linear-gradient(135deg, rgba(232,131,74,0.1), rgba(247,201,72,0.06))',
+              border: '1.5px solid rgba(232,131,74,0.3)',
             }}
           >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center font-black text-lg"
-                style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', color: 'white' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              <div style={{
+                width: 48, height: 48, borderRadius: 14,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontWeight: 900, fontSize: 16, color: 'white',
+                background: 'linear-gradient(135deg, #e8834a, #f7c948)',
+                boxShadow: '0 4px 12px rgba(232,131,74,0.35)'
+              }}>
                 #{data.currentUserRank.rank}
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-widest mb-0.5" style={{ color: '#4ade80' }}>Your Ranking</p>
-                <p className="font-bold text-white text-lg">{data.currentUserRank.ecoPoints.toLocaleString()} eco-points</p>
+                <p style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--primary)', marginBottom: 2 }}>
+                  Posisi Saya
+                </p>
+                <p style={{ fontWeight: 900, color: 'var(--text-primary)', fontSize: 18, fontFamily: 'Poppins, sans-serif' }}>
+                  ⭐ {data.currentUserRank.ecoPoints.toLocaleString('id-ID')} poin
+                </p>
               </div>
             </div>
-            <div className="text-right">
-              <div className="flex items-center gap-1.5 text-green-400 text-sm font-semibold justify-end">
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: '#3d8f61', fontSize: 14, fontWeight: 800 }}>
                 <FiTrendingUp size={14} />
-                Rank #{data.currentUserRank.rank}
+                Peringkat #{data.currentUserRank.rank}
               </div>
-              <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                🔥 {data.currentUserRank.streak}d streak 
+              <div style={{ fontSize: 12, marginTop: 2, color: 'var(--text-muted)', fontWeight: 600 }}>
+                🔥 {data.currentUserRank.streak} hari beruntun
               </div>
             </div>
           </motion.div>
         )}
 
-        {/* ── Top 3 Podium ── */}
+        {/* Top 3 Podium */}
         {!loading && top3.length >= 1 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="card mb-6 p-6"
+            className="card"
+            style={{ padding: '24px 20px', marginBottom: 20 }}
           >
-            <p className="text-xs font-semibold uppercase tracking-widest mb-6 text-center" style={{ color: 'var(--text-muted)' }}>
-              🏆 Top Performers
+            <p style={{
+              fontSize: 12, fontWeight: 800, textTransform: 'uppercase',
+              letterSpacing: '0.1em', textAlign: 'center', color: 'var(--text-muted)', marginBottom: 24
+            }}>
+              🏆 Ibu Paling Ramah Lingkungan
             </p>
-            <div className="flex items-end justify-center gap-4">
-              {/* Reorder: 2nd, 1st, 3rd */}
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 16 }}>
               {[1, 0, 2].map((idx) => {
                 const u = top3[idx];
-                if (!u) return <div key={idx} className="flex-1 max-w-32" />;
+                if (!u) return <div key={idx} style={{ flex: 1, maxWidth: 140 }} />;
                 const isFirst = idx === 0;
-                const podiumHeights = [28, 40, 20];
-                const podiumH = podiumHeights[idx === 0 ? 1 : idx === 1 ? 0 : 2];
+                const podiumHeights = [100, 130, 75];
+                const podH = podiumHeights[idx === 0 ? 1 : idx === 1 ? 0 : 2];
 
                 return (
                   <motion.div
@@ -123,44 +139,39 @@ const LeaderboardPage = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + idx * 0.1 }}
-                    className="flex-1 max-w-36 text-center"
+                    style={{ flex: 1, maxWidth: 140, textAlign: 'center' }}
                   >
-                    {/* Crown for #1 */}
-                    {isFirst && <div className="text-2xl mb-1">👑</div>}
+                    {isFirst && <div style={{ fontSize: 24, marginBottom: 4 }}>👑</div>}
 
                     {/* Avatar */}
-                    <div className="relative mx-auto mb-2" style={{ width: isFirst ? 56 : 44, height: isFirst ? 56 : 44 }}>
-                      <div
-                        className="w-full h-full rounded-full flex items-center justify-center font-black text-white"
-                        style={{
-                          background: `linear-gradient(135deg, ${rankColors[u.rank - 1] || '#374151'}, ${rankColors[u.rank - 1] || '#374151'}99)`,
-                          fontSize: isFirst ? 20 : 16,
-                          boxShadow: isFirst ? `0 0 20px ${rankColors[0]}40` : 'none'
-                        }}
-                      >
+                    <div style={{ position: 'relative', margin: '0 auto 10px', width: isFirst ? 60 : 48, height: isFirst ? 60 : 48 }}>
+                      <div style={{
+                        width: '100%', height: '100%', borderRadius: '50%',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontWeight: 900, color: 'white', fontSize: isFirst ? 22 : 17,
+                        background: `linear-gradient(135deg, ${podiumColors[u.rank - 1] || '#b08c6e'}, ${podiumColors[u.rank - 1] || '#b08c6e'}aa)`,
+                        boxShadow: isFirst ? `0 0 20px ${podiumColors[0]}60` : 'none',
+                        border: `3px solid ${podiumColors[u.rank - 1] || '#b08c6e'}60`
+                      }}>
                         {u.name?.[0]?.toUpperCase()}
                       </div>
                     </div>
 
-                    {/* Name & points */}
-                    <p className="text-sm font-bold text-white truncate mb-0.5">{u.name}</p>
-                    <p className="text-xs font-bold mb-1" style={{ color: rankColors[u.rank - 1] || '#64748b' }}>
-                      {u.ecoPoints.toLocaleString()} pts
+                    <p style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {u.name?.split(' ')[0]}
                     </p>
-                    <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-                      {medals[u.rank - 1]}
+                    <p style={{ fontSize: 12, fontWeight: 800, marginBottom: 4, color: podiumColors[u.rank - 1] || '#b08c6e' }}>
+                      ⭐ {u.ecoPoints.toLocaleString('id-ID')}
                     </p>
+                    <p style={{ fontSize: 18, marginBottom: 8 }}>{medals[u.rank - 1]}</p>
 
                     {/* Podium bar */}
-                    <div className="rounded-t-xl mx-auto"
-                      style={{
-                        height: `${podiumH * 3}px`,
-                        width: '100%',
-                        background: `linear-gradient(180deg, ${rankColors[u.rank - 1] || '#374151'}20, ${rankColors[u.rank - 1] || '#374151'}08)`,
-                        border: `1px solid ${rankColors[u.rank - 1] || '#374151'}30`,
-                        borderBottom: 'none'
-                      }}
-                    />
+                    <div style={{
+                      height: `${podH}px`, borderRadius: '12px 12px 0 0',
+                      background: `linear-gradient(180deg, ${podiumColors[u.rank - 1] || '#b08c6e'}25, ${podiumColors[u.rank - 1] || '#b08c6e'}08)`,
+                      border: `1.5px solid ${podiumColors[u.rank - 1] || '#b08c6e'}35`,
+                      borderBottom: 'none'
+                    }} />
                   </motion.div>
                 );
               })}
@@ -168,7 +179,7 @@ const LeaderboardPage = () => {
           </motion.div>
         )}
 
-        {/* ── Full Table ── */}
+        {/* Full Rankings */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -176,31 +187,42 @@ const LeaderboardPage = () => {
           className="card"
           style={{ padding: 0, overflow: 'hidden' }}
         >
-          <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
-            <h3 className="font-semibold text-white text-sm">All Rankings</h3>
-            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>Sorted by eco-points</span>
+          <div style={{
+            padding: '16px 24px', borderBottom: '1px solid rgba(232,131,74,0.08)',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between'
+          }}>
+            <h3 style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: 15 }}>
+              Semua Peringkat
+            </h3>
+            <span style={{ fontSize: 12, color: 'var(--text-muted)', fontWeight: 600 }}>
+              Diurutkan berdasarkan poin
+            </span>
           </div>
 
           {loading ? (
-            <div className="p-6 space-y-3">
-              {[...Array(5)].map((_, i) => <div key={i} className="h-14 shimmer" />)}
+            <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {[...Array(5)].map((_, i) => <div key={i} className="shimmer" style={{ height: 56 }} />)}
             </div>
           ) : !data?.leaderboard?.length ? (
-            <div className="text-center py-16">
-              <div className="text-5xl mb-4">🏆</div>
-              <p className="font-medium text-white mb-1">No users yet</p>
-              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Be the first eco-warrior!</p>
+            <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+              <div style={{ fontSize: 56, marginBottom: 16 }}>🌿</div>
+              <p style={{ fontWeight: 800, color: 'var(--text-primary)', marginBottom: 8 }}>
+                Belum ada pengguna
+              </p>
+              <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>
+                Jadilah yang pertama mencatat limbah dapur!
+              </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div style={{ overflowX: 'auto' }}>
               <table className="eco-table">
                 <thead>
                   <tr>
-                    <th style={{ width: 80 }}>Rank</th>
-                    <th>User</th>
-                    <th className="text-right">Points</th>
-                    <th className="text-right hidden sm:table-cell">Streak</th>
-                    <th className="text-right hidden sm:table-cell">Badges</th>
+                    <th style={{ width: 80 }}>Posisi</th>
+                    <th>Nama</th>
+                    <th style={{ textAlign: 'right' }}>Poin</th>
+                    <th style={{ textAlign: 'right' }}>Streak</th>
+                    <th style={{ textAlign: 'right' }}>Lencana</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -210,56 +232,62 @@ const LeaderboardPage = () => {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.03 }}
-                      style={u.isCurrentUser
-                        ? { background: 'rgba(34,197,94,0.04)' }
-                        : {}}
+                      style={u.isCurrentUser ? { background: 'rgba(232,131,74,0.05)' } : {}}
                     >
                       <td>
-                        <div className="flex items-center">
-                          {u.rank <= 3 ? (
-                            <span className="text-xl">{medals[u.rank - 1]}</span>
-                          ) : (
-                            <span className="text-sm font-bold font-mono px-2 py-1 rounded-lg"
-                              style={{ background: 'rgba(255,255,255,0.04)', color: '#475569' }}>
-                              #{u.rank}
-                            </span>
-                          )}
-                        </div>
+                        {u.rank <= 3 ? (
+                          <span style={{ fontSize: 20 }}>{medals[u.rank - 1]}</span>
+                        ) : (
+                          <span style={{
+                            fontSize: 13, fontWeight: 800, padding: '3px 9px', borderRadius: 8,
+                            background: 'rgba(232,131,74,0.06)', color: 'var(--text-muted)'
+                          }}>
+                            #{u.rank}
+                          </span>
+                        )}
                       </td>
                       <td>
-                        <div className="flex items-center gap-3">
-                          <div
-                            className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold text-white flex-shrink-0"
-                            style={{
-                              background: u.isCurrentUser
-                                ? 'linear-gradient(135deg, #22c55e, #16a34a)'
-                                : 'linear-gradient(135deg, #1e293b, #0f172a)',
-                              border: u.isCurrentUser ? '2px solid rgba(34,197,94,0.4)' : '1px solid rgba(255,255,255,0.06)'
-                            }}
-                          >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                          <div style={{
+                            width: 38, height: 38, borderRadius: 12, flexShrink: 0,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: 15, fontWeight: 900, color: 'white',
+                            background: u.isCurrentUser
+                              ? 'linear-gradient(135deg, #e8834a, #f7c948)'
+                              : 'linear-gradient(135deg, #e8c9aa, #d4a574)',
+                            border: u.isCurrentUser ? '2px solid rgba(232,131,74,0.5)' : '1.5px solid rgba(232,131,74,0.15)'
+                          }}>
                             {u.name?.[0]?.toUpperCase()}
                           </div>
                           <div>
-                            <span className="font-semibold text-white text-sm">{u.name}</span>
+                            <span style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: 14 }}>
+                              {u.name}
+                            </span>
                             {u.isCurrentUser && (
-                              <span className="ml-2 text-xs px-2 py-0.5 rounded-full font-semibold"
-                                style={{ background: 'rgba(34,197,94,0.12)', color: '#4ade80' }}>
-                                You
+                              <span style={{
+                                marginLeft: 8, fontSize: 11, padding: '2px 8px', borderRadius: 50,
+                                background: 'rgba(232,131,74,0.12)', color: 'var(--primary)', fontWeight: 800
+                              }}>
+                                Saya 👩‍🍳
                               </span>
                             )}
                           </div>
                         </div>
                       </td>
-                      <td className="text-right">
-                        <span className="font-bold text-base" style={{ color: '#4ade80' }}>
-                          {u.ecoPoints.toLocaleString()}
+                      <td style={{ textAlign: 'right' }}>
+                        <span style={{ fontWeight: 900, fontSize: 15, color: '#c07a10' }}>
+                          ⭐ {u.ecoPoints.toLocaleString('id-ID')}
                         </span>
                       </td>
-                      <td className="text-right hidden sm:table-cell">
-                        <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>🔥 {u.streak}d</span>
+                      <td style={{ textAlign: 'right' }}>
+                        <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 700 }}>
+                          🔥 {u.streak} hari
+                        </span>
                       </td>
-                      <td className="text-right hidden sm:table-cell">
-                        <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>🏅 {u.badges}</span>
+                      <td style={{ textAlign: 'right' }}>
+                        <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 700 }}>
+                          🏆 {u.badges}
+                        </span>
                       </td>
                     </motion.tr>
                   ))}
@@ -267,6 +295,21 @@ const LeaderboardPage = () => {
               </table>
             </div>
           )}
+        </motion.div>
+
+        {/* Motivational Footer */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="friendly-alert-green"
+          style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 14 }}
+        >
+          <span style={{ fontSize: 28 }}>💪</span>
+          <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6, fontWeight: 600 }}>
+            Semakin sedikit limbah dapur yang Anda hasilkan, semakin tinggi poin dan posisi Anda!
+            Bersama-sama, kita bisa membuat Indonesia lebih bersih! 🌿🇮🇩
+          </p>
         </motion.div>
       </div>
     </div>
