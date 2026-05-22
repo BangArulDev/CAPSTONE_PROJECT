@@ -1,9 +1,20 @@
 const express = require('express');
-const { v4: uuidv4 } = require('uuid');
-const { readData, writeData } = require('../models/dataStore');
+const supabase = require('../config/supabase');
 const { authenticateToken } = require('../middleware/auth');
+const fs = require('fs');
+const path = require('path');
 
 const router = express.Router();
+
+// Get badges statically
+const badgesDataPath = path.join(__dirname, '../../data/badges.json');
+const getBadgesDefinition = () => {
+  try {
+    return JSON.parse(fs.readFileSync(badgesDataPath, 'utf8')).badges || [];
+  } catch {
+    return [];
+  }
+};
 
 // Helper: calculate eco points from a log entry
 const calculatePoints = (log) => {
@@ -20,31 +31,30 @@ const calculatePoints = (log) => {
 };
 
 // Helper: update streak
-const updateStreak = (user) => {
+const getUpdatedStreak = (user) => {
   const today = new Date().toISOString().split('T')[0];
   const lastLog = user.lastLogDate;
+  let newStreak = user.streak || 0;
 
   if (!lastLog) {
-    user.streak = 1;
+    newStreak = 1;
   } else {
     const last = new Date(lastLog);
     const todayDate = new Date(today);
     const diffDays = Math.floor((todayDate - last) / (1000 * 60 * 60 * 24));
     if (diffDays === 1) {
-      user.streak += 1;
+      newStreak += 1;
     } else if (diffDays > 1) {
-      user.streak = 1;
+      newStreak = 1;
     }
   }
-  user.lastLogDate = today;
-  return user;
+  return { streak: newStreak, lastLogDate: today };
 };
 
 // Helper: check and award badges
-const checkBadges = (user, logs) => {
-  const allBadges = readData('badges.json').badges || [];
-  const userLogs = logs.filter(l => l.userId === user.id);
-  const earnedIds = user.badges || [];
+const checkBadges = (user, userLogs) => {
+  const allBadges = getBadgesDefinition();
+  const earnedIds = [...(user.badges || [])];
 
   allBadges.forEach(badge => {
     if (earnedIds.includes(badge.id)) return;
@@ -67,30 +77,32 @@ const checkBadges = (user, logs) => {
     if (earned) earnedIds.push(badge.id);
   });
 
-  user.badges = earnedIds;
-  return user;
+  return earnedIds;
 };
 
 // GET /api/logs — get user's logs
-router.get('/', authenticateToken, (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
-    const db = readData('logs.json');
-    const logs = (db.logs || []).filter(l => l.userId === req.user.id);
-    
-    // Sort by date descending
-    logs.sort((a, b) => new Date(b.date) - new Date(a.date));
+    const { data: logs, error } = await supabase
+      .from('logs')
+      .select('*')
+      .eq('userId', req.user.id)
+      .order('date', { ascending: false });
+
+    if (error) throw error;
 
     res.json({
       success: true,
       data: { logs, total: logs.length }
     });
   } catch (error) {
+    console.error('Fetch logs error:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
 
 // POST /api/logs — submit a new log
-router.post('/', authenticateToken, (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   try {
     const { wasteKg, energyKwh, transportMode, waterLiters, notes } = req.body;
 
@@ -103,11 +115,14 @@ router.post('/', authenticateToken, (req, res) => {
 
     const today = new Date().toISOString().split('T')[0];
     
-    const logDb = readData('logs.json');
-    const allLogs = logDb.logs || [];
-    
     // Check if already logged today
-    const existingToday = allLogs.find(l => l.userId === req.user.id && l.date === today);
+    const { data: existingToday, error: checkError } = await supabase
+      .from('logs')
+      .select('id')
+      .eq('userId', req.user.id)
+      .eq('date', today)
+      .maybeSingle();
+
     if (existingToday) {
       return res.status(409).json({
         success: false,
@@ -115,39 +130,55 @@ router.post('/', authenticateToken, (req, res) => {
       });
     }
 
-    const newLog = {
-      id: uuidv4(),
-      userId: req.user.id,
-      date: today,
-      wasteKg: parseFloat(wasteKg),
-      energyKwh: parseFloat(energyKwh),
-      transportMode,
-      waterLiters: parseFloat(waterLiters),
-      notes: notes || '',
-      points: 0,
-      createdAt: new Date().toISOString()
-    };
+    const points = calculatePoints({ wasteKg, energyKwh, transportMode, waterLiters });
 
-    newLog.points = calculatePoints(newLog);
-    allLogs.push(newLog);
-    writeData('logs.json', { logs: allLogs });
+    // Insert new log
+    const { data: newLog, error: insertError } = await supabase
+      .from('logs')
+      .insert([
+        {
+          userId: req.user.id,
+          date: today,
+          wasteKg: parseFloat(wasteKg),
+          energyKwh: parseFloat(energyKwh),
+          transportMode,
+          waterLiters: parseFloat(waterLiters),
+          notes: notes || '',
+          points
+        }
+      ])
+      .select()
+      .single();
 
-    // Update user's eco points and streak
-    const userDb = readData('users.json');
-    const users = userDb.users || [];
-    let userIndex = users.findIndex(u => u.id === req.user.id);
-    
-    if (userIndex !== -1) {
-      users[userIndex] = updateStreak(users[userIndex]);
-      users[userIndex].ecoPoints = (users[userIndex].ecoPoints || 0) + newLog.points;
-      users[userIndex] = checkBadges(users[userIndex], allLogs);
-      writeData('users.json', { users });
+    if (insertError) throw insertError;
+
+    // Get user and all logs to update stats and badges
+    const { data: user } = await supabase.from('users').select('*').eq('id', req.user.id).single();
+    const { data: allUserLogs } = await supabase.from('logs').select('*').eq('userId', req.user.id);
+
+    if (user) {
+      const { streak, lastLogDate } = getUpdatedStreak(user);
+      const newEcoPoints = (user.ecoPoints || 0) + points;
+      
+      const tempUser = { ...user, streak, ecoPoints: newEcoPoints };
+      const newBadges = checkBadges(tempUser, allUserLogs || []);
+
+      // Update user
+      await supabase
+        .from('users')
+        .update({
+          streak,
+          lastLogDate,
+          ecoPoints: newEcoPoints,
+          badges: newBadges
+        })
+        .eq('id', user.id);
     }
 
     res.status(201).json({
       success: true,
       message: 'Log submitted successfully',
-      data: { log: newLog, pointsEarned: newLog.points }
+      data: { log: newLog, pointsEarned: points }
     });
   } catch (error) {
     console.error('Log error:', error);
@@ -156,12 +187,16 @@ router.post('/', authenticateToken, (req, res) => {
 });
 
 // GET /api/logs/:id — get a specific log
-router.get('/:id', authenticateToken, (req, res) => {
+router.get('/:id', authenticateToken, async (req, res) => {
   try {
-    const db = readData('logs.json');
-    const log = (db.logs || []).find(l => l.id === req.params.id && l.userId === req.user.id);
+    const { data: log, error } = await supabase
+      .from('logs')
+      .select('*')
+      .eq('id', req.params.id)
+      .eq('userId', req.user.id)
+      .single();
     
-    if (!log) {
+    if (error || !log) {
       return res.status(404).json({ success: false, message: 'Log not found' });
     }
     

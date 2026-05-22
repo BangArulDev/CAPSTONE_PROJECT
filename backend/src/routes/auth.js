@@ -1,8 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { v4: uuidv4 } = require('uuid');
-const { readData, writeData } = require('../models/dataStore');
+const supabase = require('../config/supabase');
 
 const router = express.Router();
 
@@ -25,11 +24,14 @@ router.post('/register', async (req, res) => {
       });
     }
 
-    const db = readData('users.json');
-    const users = db.users || [];
+    // Check existing email
+    const { data: existingUser, error: checkError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('email', email)
+      .single();
 
-    const existing = users.find(u => u.email === email);
-    if (existing) {
+    if (existingUser) {
       return res.status(409).json({ 
         success: false, 
         message: 'Email already registered' 
@@ -37,20 +39,27 @@ router.post('/register', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = {
-      id: uuidv4(),
-      name,
-      email,
-      password: hashedPassword,
-      ecoPoints: 0,
-      streak: 0,
-      lastLogDate: null,
-      badges: [],
-      createdAt: new Date().toISOString()
-    };
+    
+    // Insert new user
+    const { data: newUser, error: insertError } = await supabase
+      .from('users')
+      .insert([
+        {
+          name,
+          email,
+          password: hashedPassword,
+          ecoPoints: 0,
+          streak: 0,
+          badges: []
+        }
+      ])
+      .select()
+      .single();
 
-    users.push(newUser);
-    writeData('users.json', { users });
+    if (insertError) {
+      console.error('Supabase Insert Error:', insertError);
+      return res.status(500).json({ success: false, message: 'Database error' });
+    }
 
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email, name: newUser.name },
@@ -86,11 +95,13 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    const db = readData('users.json');
-    const users = db.users || [];
+    const { data: user, error: fetchError } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .single();
 
-    const user = users.find(u => u.email === email);
-    if (!user) {
+    if (fetchError || !user) {
       return res.status(401).json({ 
         success: false, 
         message: 'Invalid email or password' 
@@ -128,20 +139,25 @@ router.post('/login', async (req, res) => {
 });
 
 // GET /api/auth/me
-router.get('/me', (req, res) => {
+router.get('/me', async (req, res) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   if (!token) return res.status(401).json({ success: false, message: 'No token' });
 
   try {
     const decoded = require('jsonwebtoken').verify(token, process.env.JWT_SECRET);
-    const db = readData('users.json');
-    const user = (db.users || []).find(u => u.id === decoded.id);
-    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+    
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', decoded.id)
+      .single();
+
+    if (error || !user) return res.status(404).json({ success: false, message: 'User not found' });
 
     const { password: _, ...userWithoutPassword } = user;
     res.json({ success: true, data: { user: userWithoutPassword } });
-  } catch {
+  } catch (error) {
     res.status(403).json({ success: false, message: 'Invalid token' });
   }
 });

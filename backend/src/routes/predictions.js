@@ -1,18 +1,22 @@
 const express = require('express');
-const { readData } = require('../models/dataStore');
+const supabase = require('../config/supabase');
 const { authenticateToken } = require('../middleware/auth');
 const { generatePredictions } = require('../ai/predictor');
 
 const router = express.Router();
 
 // GET /api/predictions — AI-powered waste/energy predictions
-router.get('/', authenticateToken, (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
-    const db = readData('logs.json');
-    const userLogs = (db.logs || []).filter(l => l.userId === req.user.id);
+    const { data: userLogs, error } = await supabase
+      .from('logs')
+      .select('*')
+      .eq('userId', req.user.id)
+      .order('date', { ascending: true });
+
+    if (error) throw error;
     
-    const sorted = [...userLogs].sort((a, b) => new Date(a.date) - new Date(b.date));
-    const predictions = generatePredictions(sorted);
+    const predictions = generatePredictions(userLogs || []);
 
     res.json({
       success: true,

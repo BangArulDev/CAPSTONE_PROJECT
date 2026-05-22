@@ -1,16 +1,32 @@
 const express = require('express');
-const { readData } = require('../models/dataStore');
+const supabase = require('../config/supabase');
 const { authenticateToken } = require('../middleware/auth');
+const fs = require('fs');
+const path = require('path');
 
 const router = express.Router();
 
 // GET /api/badges — all badges and user's earned badges
-router.get('/', authenticateToken, (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
-    const allBadges = readData('badges.json').badges || [];
+    const badgesDataPath = path.join(__dirname, '../../data/badges.json');
+    let allBadges = [];
+    try {
+      allBadges = JSON.parse(fs.readFileSync(badgesDataPath, 'utf8')).badges || [];
+    } catch {
+      // fallback if file missing
+    }
     
-    const userDb = readData('users.json');
-    const user = (userDb.users || []).find(u => u.id === req.user.id);
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('badges')
+      .eq('id', req.user.id)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      console.error('Fetch user badges error:', error);
+    }
+
     const earnedIds = user?.badges || [];
 
     const badgesWithStatus = allBadges.map(badge => ({
