@@ -131,37 +131,7 @@ const RecommendationsPage = () => {
           </div>
         </motion.div>
 
-        {/* Stats Banner */}
-        {data?.stats && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 14, marginBottom: 24 }}
-          >
-            {[
-              { label: 'Rata-rata Limbah', value: `${data.stats.avgWasteKg} kg/hari`, emoji: '🗑️', color: '#e8834a', bg: 'rgba(232,131,74,0.08)', border: 'rgba(232,131,74,0.2)' },
-              { label: 'Hemat Air', value: `${data.stats.avgWaterLiters || 0} L/hari`, emoji: '💧', color: '#45b7a0', bg: 'rgba(69,183,160,0.08)', border: 'rgba(69,183,160,0.2)' },
-              { label: 'Hemat Energi', value: `${data.stats.avgEnergyKwh || 0} kWh/hari`, emoji: '⚡', color: '#f7c948', bg: 'rgba(247,201,72,0.08)', border: 'rgba(247,201,72,0.2)' },
-              { label: 'Tips Tersedia', value: `${filtered.length} tips`, emoji: '💡', color: '#9b7fe8', bg: 'rgba(155,127,232,0.08)', border: 'rgba(155,127,232,0.2)' },
-            ].map((s, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.07 }}
-                style={{ borderRadius: 16, padding: '16px', background: s.bg, border: `1.5px solid ${s.border}` }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                  <span style={{ fontSize: 20 }}>{s.emoji}</span>
-                  <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)' }}>{s.label}</span>
-                </div>
-                <div style={{ fontWeight: 900, fontSize: 18, color: s.color, fontFamily: 'Poppins, sans-serif' }}>
-                  {s.value}
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
+
 
         {/* Daily Challenge Banner */}
         <motion.div
