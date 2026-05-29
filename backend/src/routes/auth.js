@@ -31,6 +31,12 @@ router.post('/register', async (req, res) => {
       .eq('email', email)
       .single();
 
+    // PGRST116 = no rows found, which is expected when email doesn't exist yet
+    if (checkError && checkError.code !== 'PGRST116') {
+      console.error('Supabase Check Error:', checkError);
+      return res.status(500).json({ success: false, message: 'Database error saat cek email', detail: checkError.message });
+    }
+
     if (existingUser) {
       return res.status(409).json({ 
         success: false, 
@@ -57,8 +63,13 @@ router.post('/register', async (req, res) => {
       .single();
 
     if (insertError) {
-      console.error('Supabase Insert Error:', insertError);
-      return res.status(500).json({ success: false, message: 'Database error' });
+      console.error('Supabase Insert Error:', JSON.stringify(insertError, null, 2));
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Database error saat insert user', 
+        detail: insertError.message,
+        hint: insertError.hint || null
+      });
     }
 
     const token = jwt.sign(

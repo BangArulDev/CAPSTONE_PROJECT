@@ -19,11 +19,7 @@ const difficultyConfig = {
 
 const categoryConfig = {
   all: { emoji: '🌿', label: 'Semua Tips' },
-  waste: { emoji: '🗑️', label: 'Limbah' },
-  energy: { emoji: '⚡', label: 'Energi' },
-  transport: { emoji: '🚗', label: 'Transportasi' },
-  water: { emoji: '💧', label: 'Air' },
-  general: { emoji: '🌍', label: 'Umum' },
+  waste: { emoji: '🗑️', label: 'Sampah Dapur' }
 };
 
 // Extra kitchen tips for housewives
@@ -105,9 +101,10 @@ const RecommendationsPage = () => {
   }, []);
 
   // Merge API tips with extra kitchen tips
+  // Merge API tips with extra kitchen tips and ONLY include 'waste' category
   const allTips = [
     ...kitchenTipsExtra,
-    ...(data?.recommendations || []),
+    ...(data?.recommendations?.filter(r => r.category === 'waste') || []),
   ];
 
   const filtered = allTips.filter(
