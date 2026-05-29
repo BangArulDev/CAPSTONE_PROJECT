@@ -83,7 +83,6 @@ const kitchenTipsExtra = [
 const RecommendationsPage = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all');
   const [expandedId, setExpandedId] = useState(null);
 
   useEffect(() => {
@@ -102,14 +101,10 @@ const RecommendationsPage = () => {
 
   // Merge API tips with extra kitchen tips
   // Merge API tips with extra kitchen tips and ONLY include 'waste' category
-  const allTips = [
+  const filtered = [
     ...kitchenTipsExtra,
     ...(data?.recommendations?.filter(r => r.category === 'waste') || []),
   ];
-
-  const filtered = allTips.filter(
-    r => filter === 'all' || r.category === filter
-  );
 
   return (
     <div style={{ background: 'var(--bg-main)', minHeight: '100vh' }}>
@@ -147,7 +142,7 @@ const RecommendationsPage = () => {
               { label: 'Rata-rata Limbah', value: `${data.stats.avgWasteKg} kg/hari`, emoji: '🗑️', color: '#e8834a', bg: 'rgba(232,131,74,0.08)', border: 'rgba(232,131,74,0.2)' },
               { label: 'Hemat Air', value: `${data.stats.avgWaterLiters || 0} L/hari`, emoji: '💧', color: '#45b7a0', bg: 'rgba(69,183,160,0.08)', border: 'rgba(69,183,160,0.2)' },
               { label: 'Hemat Energi', value: `${data.stats.avgEnergyKwh || 0} kWh/hari`, emoji: '⚡', color: '#f7c948', bg: 'rgba(247,201,72,0.08)', border: 'rgba(247,201,72,0.2)' },
-              { label: 'Tips Tersedia', value: `${allTips.length} tips`, emoji: '💡', color: '#9b7fe8', bg: 'rgba(155,127,232,0.08)', border: 'rgba(155,127,232,0.2)' },
+              { label: 'Tips Tersedia', value: `${filtered.length} tips`, emoji: '💡', color: '#9b7fe8', bg: 'rgba(155,127,232,0.08)', border: 'rgba(155,127,232,0.2)' },
             ].map((s, i) => (
               <motion.div
                 key={i}
@@ -195,27 +190,7 @@ const RecommendationsPage = () => {
           </span>
         </motion.div>
 
-        {/* Category Filter */}
-        <div style={{ display: 'flex', gap: 8, marginBottom: 24, overflowX: 'auto', paddingBottom: 4 }}>
-          {Object.entries(categoryConfig).map(([key, cfg]) => (
-            <motion.button
-              key={key}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setFilter(key)}
-              className="kitchen-chip"
-              style={{
-                flexShrink: 0,
-                ...(filter === key
-                  ? { background: 'rgba(232,131,74,0.12)', color: 'var(--primary)', border: '1.5px solid rgba(232,131,74,0.4)' }
-                  : { background: 'rgba(232,131,74,0.05)', color: 'var(--text-muted)', border: '1.5px solid rgba(232,131,74,0.12)' })
-              }}
-            >
-              <span>{cfg.emoji}</span>
-              <span>{cfg.label}</span>
-            </motion.button>
-          ))}
-        </div>
+
 
         {/* Tips Cards */}
         {loading ? (
