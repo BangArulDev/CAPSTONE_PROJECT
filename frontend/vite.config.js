@@ -15,6 +15,8 @@ export default defineConfig({
         target: 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
+        proxyTimeout: 30000,
+        timeout: 30000,
         // Retry jika backend belum siap
         configure: (proxy) => {
           proxy.on('error', (err) => {

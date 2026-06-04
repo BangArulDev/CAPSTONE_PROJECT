@@ -5,44 +5,44 @@ import { useAuth } from '../context/AuthContext';
 
 const features = [
   {
-    emoji: '🤖',
-    title: 'Prediksi Limbah AI',
-    desc: 'AI canggih memprediksi limbah dapur Anda 7 hari ke depan, bantu rencanakan masak lebih hemat.',
+    emoji: '📸',
+    title: 'Scan Sampah dengan AI',
+    desc: 'Arahkan kamera ke sampah Anda — AI kami langsung mengenali jenisnya dan memberi tahu cara pengelolaan terbaik.',
     color: '#e8834a',
+    tag: 'Computer Vision',
+  },
+  {
+    emoji: '📊',
+    title: 'Prediksi Jejak Karbon',
+    desc: 'AI memprediksi volume sampah dan jejak karbon Anda 7 hari ke depan berdasarkan kebiasaan harian.',
+    color: '#5cb285',
     tag: 'Teknologi AI',
   },
   {
     emoji: '💡',
-    title: 'Tips Dapur Cerdas',
-    desc: 'Rekomendasi personal cara mengurangi sisa makanan, mulai dari belanja, masak, sampai simpan.',
-    color: '#5cb285',
+    title: 'Rekomendasi Cerdas',
+    desc: 'Saran personal untuk mengurangi sampah plastik, beralih ke gaya hidup zero-waste, dan kebiasaan ramah lingkungan.',
+    color: '#45b7a0',
     tag: 'Personal',
   },
   {
     emoji: '🏆',
     title: 'Sistem Pencapaian',
-    desc: 'Kumpulkan bintang & lencana saat berhasil mengurangi limbah. Jadikan kegiatan dapur lebih menyenangkan!',
+    desc: 'Kumpulkan poin & lencana setiap berhasil mengurangi sampah. Pantau pohon virtual yang tumbuh bersama aksimu!',
     color: '#f7c948',
     tag: 'Gamifikasi',
   },
   {
-    emoji: '📊',
-    title: 'Grafik Progres',
-    desc: 'Lihat tren limbah dapur minggu ini vs bulan lalu dengan grafik yang mudah dipahami.',
-    color: '#45b7a0',
-    tag: 'Analitik',
-  },
-  {
     emoji: '🌟',
     title: 'Papan Nilai Komunitas',
-    desc: 'Bersaing bersama ibu-ibu lain dan saling semangat untuk dapur yang lebih ramah lingkungan.',
+    desc: 'Bersaing dan saling menyemangati dengan sesama pengguna EcoWise untuk bersama-sama mengurangi limbah.',
     color: '#9b7fe8',
     tag: 'Komunitas',
   },
   {
     emoji: '📝',
-    title: 'Catat Limbah Harian',
-    desc: 'Catat limbah dapur harian kurang dari 1 menit — sisa sayur, buah, nasi, dan bahan masak lainnya.',
+    title: 'Catat Aktivitas Harian',
+    desc: 'Catat sampah, energi, transportasi, dan penggunaan air harian dalam kurang dari 1 menit.',
     color: '#f17070',
     tag: 'Mudah',
   },
@@ -94,15 +94,15 @@ const indonesiaWasteFacts = [
 
 const howItWorks = [
   { step: '1', emoji: '📱', title: 'Daftar Gratis', desc: 'Buat akun dalam 30 detik, cukup nama dan email Anda.' },
-  { step: '2', emoji: '🗑️', title: 'Catat Limbah Dapur', desc: 'Setiap hari, catat sisa makanan dari dapur Anda — mudah sekali!' },
-  { step: '3', emoji: '🤖', title: 'Dapat Analisis AI', desc: 'AI kami menganalisis pola Anda dan memberikan prediksi serta saran.' },
-  { step: '4', emoji: '🏆', title: 'Kumpulkan Bintang', desc: 'Dapatkan poin & lencana. Semakin sedikit limbah, semakin banyak hadiah!' },
+  { step: '2', emoji: '📸', title: 'Scan atau Catat Sampah', desc: 'Foto sampah Anda — AI langsung mengklasifikasikannya, atau catat aktivitas harian secara manual.' },
+  { step: '3', emoji: '🤖', title: 'Dapat Analisis AI', desc: 'AI menganalisis pola Anda dan memberikan prediksi jejak karbon serta saran gaya hidup berkelanjutan.' },
+  { step: '4', emoji: '🏆', title: 'Kumpulkan Poin', desc: 'Dapatkan poin & lencana. Semakin sedikit sampah yang Anda hasilkan, semakin banyak reward!' },
 ];
 
 const testimonials = [
-  { name: 'Bu Ratna', location: 'Jakarta', text: 'Sekarang belanja lebih terencana, sisa makanan berkurang 40%. Anak-anak juga ikutan semangat!', avatar: 'R' },
-  { name: 'Bu Dewi', location: 'Surabaya', text: 'Tips dapurnya sangat praktis. Saya jadi tahu cara simpan bahan makanan yang benar!', avatar: 'D' },
-  { name: 'Bu Sari', location: 'Bandung', text: 'Aplikasi ini seperti punya asisten dapur sendiri. Grafik progresnya bikin semangat!', avatar: 'S' },
+  { name: 'Budi S.', location: 'Jakarta', text: 'EcoWise membantu saya sadar betapa banyak sampah yang saya hasilkan. Sekarang saya sudah mulai pilah sampah setiap hari!', avatar: 'B' },
+  { name: 'Rina K.', location: 'Surabaya', text: 'Fitur scan sampahnya keren banget! Tinggal foto, langsung tahu cara daur ulangnya. Sangat edukatif!', avatar: 'R' },
+  { name: 'Dimas A.', location: 'Bandung', text: 'Aplikasi ini seperti punya konsultan lingkungan pribadi. Grafik jejak karbonku makin turun tiap minggu!', avatar: 'D' },
 ];
 
 const LandingPage = () => {
@@ -123,11 +123,11 @@ const LandingPage = () => {
               fontSize: 22, boxShadow: '0 4px 12px rgba(232,131,74,0.35)'
             }}>🍃</div>
             <div>
-              <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 17, color: 'var(--text-primary)' }}>
-                Dapur<span className="gradient-text">Lestari</span>
+            <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 17, color: 'var(--text-primary)' }}>
+                Eco<span className="gradient-text">Wise</span>
               </div>
               <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600 }}>
-                Kelola Limbah Dapurmu 🌿
+                Kelola Sampah. Jejak Karbon. Bumi Sehat. 🌍
               </div>
             </div>
           </div>
@@ -183,7 +183,7 @@ const LandingPage = () => {
               }}
             >
               <div className="dot-live" />
-              Platform Pengelolaan Limbah Dapur Berbasis AI 🍃
+              Platform Pengelolaan Sampah & Jejak Karbon Berbasis AI 🌍
             </motion.div>
 
             <h1 style={{
@@ -191,17 +191,17 @@ const LandingPage = () => {
               fontSize: 'clamp(36px, 6vw, 64px)', marginBottom: 20,
               lineHeight: 1.15, color: 'var(--text-primary)'
             }}>
-              Dapur Bersih,{' '}
-              <span className="gradient-text-hero">Lingkungan Sehat</span>
-              <br />Bersama <span className="gradient-text">DapurLestari!</span>
+              Kurangi Sampah,{' '}
+              <span className="gradient-text-hero">Selamatkan Bumi</span>
+              <br />Bersama <span className="gradient-text">EcoWise!</span>
             </h1>
 
             <p style={{
               fontSize: 18, marginBottom: 36, maxWidth: 560, margin: '0 auto 36px',
               color: 'var(--text-secondary)', lineHeight: 1.7
             }}>
-              Bantu ibu rumah tangga mengelola limbah dapur dengan lebih cerdas.
-              Catat sisa makanan, dapat tips hemat, dan bersaing dalam komunitas ibu-ibu peduli lingkungan! 🌍
+              Platform AI untuk membantu Anda mengelola sampah, memantau jejak karbon,
+              dan membangun kebiasaan hidup berkelanjutan — mulai hari ini. 🌍
             </p>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center', marginBottom: 32 }}>
@@ -355,11 +355,11 @@ const LandingPage = () => {
                 fontFamily: 'Poppins, sans-serif', fontWeight: 800,
                 fontSize: 'clamp(28px, 4vw, 40px)', color: 'var(--text-primary)', marginBottom: 16
               }}>
-                Semua yang Ibu Butuhkan untuk{' '}
-                <span className="gradient-text">Dapur Ramah Lingkungan</span>
+                Semua yang Anda Butuhkan untuk{' '}
+                <span className="gradient-text">Hidup Ramah Lingkungan</span>
               </h2>
               <p style={{ maxWidth: 500, margin: '0 auto', color: 'var(--text-secondary)', fontSize: 15, lineHeight: 1.7 }}>
-                Dirancang khusus untuk ibu rumah tangga — mudah digunakan, bahasa Indonesia, dan menyenangkan!
+                Dirancang untuk semua orang — mudah digunakan, berbasis AI canggih, dan menyenangkan!
               </p>
             </motion.div>
           </div>
@@ -462,7 +462,7 @@ const LandingPage = () => {
               💬 Kata Mereka
             </p>
             <h2 style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 'clamp(26px, 4vw, 36px)', color: 'var(--text-primary)' }}>
-              Ibu-Ibu Hebat yang Sudah Bergabung
+              Pengguna yang Sudah Bergabung
             </h2>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20 }}>
@@ -515,10 +515,10 @@ const LandingPage = () => {
                 fontFamily: 'Poppins, sans-serif', fontWeight: 800,
                 fontSize: 'clamp(26px, 4vw, 36px)', marginBottom: 16, color: 'var(--text-primary)'
               }}>
-                Siap Membuat Dapur Lebih Ramah Lingkungan?
+                Siap Berkontribusi untuk Bumi yang Lebih Baik?
               </h2>
               <p style={{ marginBottom: 28, maxWidth: 480, margin: '0 auto 28px', color: 'var(--text-secondary)', fontSize: 15, lineHeight: 1.7 }}>
-                Bergabunglah bersama ribuan ibu rumah tangga yang sudah berhasil mengurangi limbah dapur mereka bersama DapurLestari!
+                Bergabunglah bersama ribuan pengguna EcoWise yang sudah berhasil mengurangi jejak karbon mereka!
               </p>
 
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center', marginBottom: 24 }}>
@@ -554,12 +554,12 @@ const LandingPage = () => {
             }}>🍃</div>
             <div>
               <span style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, color: 'var(--text-primary)', fontSize: 16 }}>
-                Dapur<span className="gradient-text">Lestari</span>
+                Eco<span className="gradient-text">Wise</span>
               </span>
             </div>
           </div>
           <p style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 600 }}>
-            © 2024 DapurLestari — Untuk ibu yang peduli lingkungan 💚
+            © 2024 EcoWise — Bersama kita jaga bumi untuk generasi mendatang 🌍
           </p>
         </div>
       </footer>

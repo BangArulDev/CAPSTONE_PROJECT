@@ -57,10 +57,10 @@ const AuthPage = () => {
   };
 
   const benefits = [
-    '🤖 Prediksi limbah dapur dengan AI',
-    '🗑️ Catat limbah harian dengan mudah',
-    '🏆 Kumpulkan poin & lencana',
-    '💡 Dapat tips dapur yang berguna',
+    '📸 Scan sampah dengan AI — langsung tahu cara daur ulangnya!',
+    '📊 Pantau jejak karbon harian Anda',
+    '🏆 Kumpulkan poin & lencana ramah lingkungan',
+    '💡 Dapat rekomendasi gaya hidup berkelanjutan',
   ];
 
   return (
@@ -106,30 +106,30 @@ const AuthPage = () => {
               }}>🍃</div>
               <div>
                 <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 22, color: 'white', lineHeight: 1.1 }}>
-                  Dapur
+                  Eco
                   <span style={{
                     background: 'linear-gradient(135deg, #e8834a, #f7c948)',
                     WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-                  }}>Lestari</span>
+                  }}>Wise</span>
                 </div>
                 <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>Kelola Limbah Dapurmu 🌿</div>
               </div>
             </div>
 
-            <h2 style={{
+              <h2 style={{
               fontFamily: 'Poppins, sans-serif', fontWeight: 900,
               fontSize: 38, color: 'white', lineHeight: 1.2, marginBottom: 16,
             }}>
-              Dapur Bersih,<br />
+              Kurangi Sampah,<br />
               <span style={{
                 background: 'linear-gradient(135deg, #e8834a, #f7c948)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              }}>Bumi Sehat!</span>
+              }}>Selamatkan Bumi!</span>
             </h2>
 
             <p style={{ fontSize: 16, marginBottom: 36, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7 }}>
-              Bergabunglah bersama ribuan ibu rumah tangga yang sudah peduli
-              lingkungan melalui pengelolaan limbah dapur yang cerdas.
+              Bergabunglah bersama ribuan pengguna yang sudah
+              berkomitmen mengurangi sampah dan jejak karbon mereka.
             </p>
 
             {/* Benefits list */}
@@ -206,7 +206,7 @@ const AuthPage = () => {
               }}>🍃</div>
               <div>
                 <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 19, color: 'var(--text-primary)' }}>
-                  Dapur<span className="gradient-text">Lestari</span>
+                  Eco<span className="gradient-text">Wise</span>
                 </div>
                 <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600 }}>Kelola Limbah Dapurmu 🌿</div>
               </div>
@@ -252,8 +252,8 @@ const AuthPage = () => {
                   </h1>
                   <p style={{ fontSize: 14, marginTop: 6, color: 'var(--text-muted)', fontWeight: 600 }}>
                     {isRegister
-                      ? 'Bergabung dan mulai perjalanan dapur hijau Anda!'
-                      : 'Lanjutkan perjalanan dapur ramah lingkungan Anda!'}
+                      ? 'Bergabung dan mulai perjalanan hidup hijau Anda!'
+                      : 'Lanjutkan perjalanan ramah lingkungan Anda!'}
                   </p>
                 </div>
 
@@ -341,7 +341,7 @@ const AuthPage = () => {
                       </>
                     ) : (
                       <>
-                        {isRegister ? '🎉 Daftar Sekarang' : '🚀 Masuk ke Dapur'}
+                        {isRegister ? '🎉 Daftar Sekarang' : '🚀 Masuk ke EcoWise'}
                         <FiArrowRight size={16} />
                       </>
                     )}

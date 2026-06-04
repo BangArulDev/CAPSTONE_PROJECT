@@ -67,7 +67,7 @@ app.use('/api/badges', badgesRoutes);
 app.get('/api/health', (_req, res) => {
   res.json({
     success: true,
-    message: 'EcoWise API is running 🌱',
+    message: 'Eco Wise API is running 🌱',
     version: '1.0.0',
     timestamp: new Date().toISOString()
   });
@@ -88,7 +88,7 @@ app.use((err, _req, res, _next) => {
 app.listen(PORT, () => {
   console.log(`
 ╔══════════════════════════════════════╗
-║   🌱 EcoWise API Server Running!     ║
+║   🌱 Eco Wise API Server Running!     ║
 ║   Port: ${PORT}                           ║
 ║   Env:  ${process.env.NODE_ENV || 'development'}              ║
 ╚══════════════════════════════════════╝

@@ -58,6 +58,18 @@ export const predictionsAPI = {
   get: () => api.get('/predictions'),
 };
 
+// ──── Scan Sampah (ML Model) ────
+export const scanAPI = {
+  scan: (imageFile) => {
+    const formData = new FormData();
+    formData.append('file', imageFile);
+    return api.post('/predictions/scan', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      timeout: 30000, // model bisa butuh waktu lebih lama
+    });
+  },
+};
+
 // ──── Recommendations ────
 export const recommendationsAPI = {
   get: () => api.get('/recommendations'),

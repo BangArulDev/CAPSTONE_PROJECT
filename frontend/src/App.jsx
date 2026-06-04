@@ -5,6 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import LandingPage from './pages/LandingPage';
 import AuthPage from './pages/AuthPage';
 import Dashboard from './pages/Dashboard';
+import ScanPage from './pages/ScanPage';
 import PredictionsPage from './pages/PredictionsPage';
 import RecommendationsPage from './pages/RecommendationsPage';
 import LeaderboardPage from './pages/LeaderboardPage';
@@ -21,6 +22,7 @@ const App = () => {
 
           {/* Protected */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/scan" element={<ProtectedRoute><ScanPage /></ProtectedRoute>} />
           <Route path="/predictions" element={<ProtectedRoute><PredictionsPage /></ProtectedRoute>} />
           <Route path="/recommendations" element={<ProtectedRoute><RecommendationsPage /></ProtectedRoute>} />
           <Route path="/leaderboard" element={<ProtectedRoute><LeaderboardPage /></ProtectedRoute>} />

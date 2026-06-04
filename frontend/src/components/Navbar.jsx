@@ -4,8 +4,9 @@ import { useAuth } from '../context/AuthContext';
 
 const navItems = [
   { path: '/dashboard', label: 'Beranda', emoji: '🏠' },
-  { path: '/predictions', label: 'Prediksi AI', emoji: '🤖' },
-  { path: '/recommendations', label: 'Tips Dapur', emoji: '💡' },
+  { path: '/scan', label: 'Scan AI', emoji: '📸' },
+  { path: '/predictions', label: 'Prediksi', emoji: '🤖' },
+  { path: '/recommendations', label: 'Rekomendasi', emoji: '💡' },
   { path: '/badges', label: 'Pencapaian', emoji: '🏆' },
   { path: '/leaderboard', label: 'Papan Nilai', emoji: '🌟' },
 ];
@@ -41,10 +42,10 @@ const Navbar = () => {
                   fontFamily: 'Poppins, sans-serif', fontWeight: 800,
                   fontSize: 17, color: 'var(--text-primary)', lineHeight: 1.1
                 }}>
-                  Dapur<span className="gradient-text">Lestari</span>
+                  Eco<span className="gradient-text">Wise</span>
                 </div>
                 <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600 }}>
-                  Kelola Limbah Dapurmu 🌿
+                  Kelola Sampah. Jejak Karbon. Bumi Sehat. 🌍
                 </div>
               </div>
             </NavLink>

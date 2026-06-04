@@ -1,0 +1,17 @@
+Nama Kolom,Tipe Data,Deskripsi,Satuan,Rentang Nilai,Sumber
+user_id,Integer,ID unik pengguna,-,1 - N,Generated
+usia,Integer,Usia pengguna,tahun,18 - 65,Input pengguna
+jumlah_anggota_keluarga,Integer,Total anggota yang tinggal serumah,orang,1 - 10,Input pengguna
+frekuensi_belanja_per_minggu,Integer,Berapa kali berbelanja dalam seminggu,kali/minggu,1 - 14,Input pengguna
+penggunaan_plastik_per_hari_gram,Float,Estimasi berat plastik yang digunakan per hari,gram,10 - 500,Input pengguna
+sisa_makanan_per_hari_gram,Float,Estimasi berat sisa makanan yang dibuang per hari,gram,0 - 600,Input pengguna
+penggunaan_elektronik_jam,Float,Rata-rata jam penggunaan elektronik per hari,jam,0 - 16,Input pengguna
+kendaraan,String,Jenis transportasi utama yang digunakan,-,motor/mobil/transportasi_umum/sepeda,Input pengguna
+wilayah,String,Kota domisili pengguna,-,"Jakarta, Surabaya, Bandung, dll",Input pengguna
+pendapatan_juta,Float,Pendapatan bulanan rumah tangga,juta Rp,1 - 50,Input pengguna
+volume_sampah_kg_minggu,Float,TARGET — Total volume sampah yang dihasilkan per minggu,kg,1 - 30,Target variabel
+sampah_plastik_per_orang,Float,[Engineered] Plastik per anggota keluarga per hari,gram/orang,Derived,Feature Engineering
+sampah_makanan_per_orang,Float,[Engineered] Sisa makanan per anggota keluarga,gram/orang,Derived,Feature Engineering
+total_konsumsi_harian_gram,Float,[Engineered] Total konsumsi plastik + makanan per hari,gram,Derived,Feature Engineering
+rasio_belanja_keluarga,Float,[Engineered] Frekuensi belanja per anggota keluarga,kali/orang/minggu,Derived,Feature Engineering
+segmen_usia,String,[Engineered] Segmentasi generasi berdasarkan usia,-,"Gen_Z, Milenial_Muda, Milenial_Senior, Gen_X",Feature Engineering

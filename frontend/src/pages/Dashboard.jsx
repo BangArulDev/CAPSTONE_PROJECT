@@ -8,22 +8,22 @@ import { useAuth } from '../context/AuthContext';
 import { logsAPI } from '../services/api';
 import Navbar from '../components/Navbar';
 
-// Kategori jenis limbah dapur
+// Kategori jenis sampah umum
 const kitchenWasteTypes = [
-  { value: 'sisa_nasi', label: '🍚 Sisa Nasi', desc: 'Nasi yang tersisa dari makan' },
-  { value: 'sayuran', label: '🥦 Sayuran/Bumbu', desc: 'Sisa sayur, daun, dan bumbu' },
-  { value: 'buah', label: '🍎 Buah-buahan', desc: 'Buah busuk atau kulit buah' },
-  { value: 'lauk', label: '🍗 Sisa Lauk', desc: 'Daging, ikan, tempe, tahu sisa' },
-  { value: 'kulit_sayur', label: '🥔 Kulit & Batang', desc: 'Kulit kentang, batang brokoli, dll' },
-  { value: 'minyak', label: '🫙 Sisa Minyak', desc: 'Minyak bekas goreng' },
-  { value: 'lainnya', label: '♻️ Lainnya', desc: 'Jenis limbah dapur lainnya' },
+  { value: 'organik', label: '🌿 Sampah Organik', desc: 'Sisa makanan, dedaunan, dll' },
+  { value: 'plastik', label: '🧴 Plastik', desc: 'Botol, kantong, kemasan plastik' },
+  { value: 'kertas', label: '📜 Kertas/Kardus', desc: 'Kertas, kardus, koran bekas' },
+  { value: 'kaca', label: '🪩 Kaca/Beling', desc: 'Botol kaca, cermin pecah' },
+  { value: 'logam', label: '🔩 Logam/Kaleng', desc: 'Kaleng bekas, besi, aluminium' },
+  { value: 'elektronik', label: '📱 Elektronik', desc: 'Baterai, kabel, gadget bekas' },
+  { value: 'lainnya', label: '♻️ Lainnya', desc: 'Jenis sampah lainnya' },
 ];
 
-// Mode penanganan limbah
+// Mode penanganan sampah
 const wasteDisposalMethods = [
-  { value: 'kompos', label: '♻️ Kompos', points: '+25', color: '#5cb285', desc: 'Jadikan pupuk kompos' },
-  { value: 'pakan_ternak', label: '🐄 Pakan Ternak', points: '+20', color: '#45b7a0', desc: 'Berikan ke hewan peliharaan/ternak' },
-  { value: 'olah_lagi', label: '👩‍🍳 Olah Lagi', points: '+15', color: '#f7c948', desc: 'Masak ulang menjadi menu baru' },
+  { value: 'daur_ulang', label: '♻️ Daur Ulang', points: '+30', color: '#5cb285', desc: 'Pisahkan untuk didaur ulang' },
+  { value: 'kompos', label: '🌱 Kompos', points: '+25', color: '#45b7a0', desc: 'Jadikan pupuk kompos (organik)' },
+  { value: 'bank_sampah', label: '🏦 Bank Sampah', points: '+20', color: '#f7c948', desc: 'Setor ke bank sampah terdekat' },
   { value: 'buang_sampah', label: '🗑️ Buang Biasa', points: '+0', color: '#b08c6e', desc: 'Dibuang ke tempat sampah biasa' },
 ];
 
@@ -93,7 +93,7 @@ const Dashboard = () => {
         notes: kitchenNote,
       };
       const res = await logsAPI.submit(payload);
-      showToast(`🎉 Hebat! +${res.data.pointsEarned} poin earned! Dapur makin ramah lingkungan! 🌿`);
+      showToast(`🎉 Hebat! +${res.data.pointsEarned} poin earned! Terus jaga lingkungan! 🌍`);
       setShowForm(false);
       setForm({ wasteKg: '', energyKwh: '', transportMode: 'bicycle', waterLiters: '', notes: '', wasteType: 'sisa_nasi', disposalMethod: 'kompos' });
       await fetchLogs();
@@ -188,15 +188,15 @@ const Dashboard = () => {
 
   // Quick tips based on waste level
   const quickTips = avgWaste > 1.5 ? [
-    '💡 Coba masak secukupnya saja — masak lebih sedikit tapi lebih sering!',
-    '🥡 Simpan sisa makanan di kulkas, bisa dimakan besok sebagai bekal!',
-    '🌱 Sisa sayuran bisa dijadikan kaldu yang lezat untuk sup!',
+    '💡 Kurangi sampah plastik dengan membawa tas belanja sendiri dan botol minum reusable!',
+    '♻️ Pisahkan sampah organik dan anorganik — langkah kecil yang berdampak besar!',
+    '🌱 Sampah organik bisa jadi kompos yang berguna untuk tanaman di rumah!',
   ] : avgWaste > 0.5 ? [
-    '👍 Bagus! Coba jadikan kulit buah/sayur menjadi pupuk kompos!',
-    '🍳 Sisa nasi kemarin? Jadikan nasi goreng yang lezat!',
+    '👍 Bagus! Coba pilah sampahmu ke bank sampah terdekat untuk didaur ulang!',
+    '📸 Gunakan fitur Scan Sampah untuk mengetahui cara terbaik mengelola sampahmu!',
   ] : [
-    '🌟 Luar biasa! Dapur Anda sangat ramah lingkungan!',
-    '♻️ Pertahankan kebiasaan baik ini ya, Bu!',
+    '🌟 Luar biasa! Jejak karbonmu sangat rendah — Anda pahlawan lingkungan!',
+    '♻️ Pertahankan kebiasaan ramah lingkungan ini terus ya!',
   ];
 
   return (
@@ -240,7 +240,7 @@ const Dashboard = () => {
             <p style={{ fontSize: 14, color: 'var(--text-muted)', fontWeight: 600 }}>
               {hasLoggedToday
                 ? '✅ Sudah mencatat hari ini — terima kasih sudah peduli lingkungan!'
-                : '📋 Belum ada catatan limbah dapur hari ini. Yuk catat sekarang!'}
+                : '📋 Belum ada catatan sampah hari ini. Yuk catat sekarang!'}
             </p>
           </div>
           <motion.button
@@ -256,7 +256,7 @@ const Dashboard = () => {
             }}
           >
             <FiPlus size={18} />
-            {hasLoggedToday ? 'Sudah Catat Hari Ini ✅' : '+ Catat Limbah Dapur'}
+            {hasLoggedToday ? 'Sudah Catat Hari Ini ✅' : '+ Catat Sampah Harian'}
           </motion.button>
         </div>
 
@@ -270,7 +270,7 @@ const Dashboard = () => {
           <span style={{ fontSize: 28, flexShrink: 0 }}>💡</span>
           <div>
             <p style={{ fontWeight: 800, color: 'var(--text-primary)', marginBottom: 4, fontSize: 15 }}>
-              Tips Dapur Hari Ini
+              Tips Eco Hari Ini
             </p>
             <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
               {quickTips[Math.floor(Date.now() / 86400000) % quickTips.length]}
@@ -368,7 +368,7 @@ const Dashboard = () => {
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px 16px', borderBottom: '1px solid rgba(232,131,74,0.08)' }}>
             <div>
-              <h3 style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: 16 }}>📊 Grafik Limbah Dapur</h3>
+              <h3 style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: 16 }}>📊 Grafik Sampah & Karbon</h3>
               <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>
                 {Math.min(logs.length, 10)} catatan terakhir
               </p>
@@ -397,7 +397,7 @@ const Dashboard = () => {
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 180, gap: 12 }}>
                 <span style={{ fontSize: 48 }}>📊</span>
                 <p style={{ fontSize: 14, color: 'var(--text-muted)', fontWeight: 600, textAlign: 'center' }}>
-                  Belum ada data untuk ditampilkan.<br />Mulai catat limbah dapur Anda!
+                  Belum ada data untuk ditampilkan.<br />Mulai catat sampah harian Anda!
                 </p>
               </div>
             ) : (
@@ -457,10 +457,10 @@ const Dashboard = () => {
             <div style={{ textAlign: 'center', padding: '60px 20px' }}>
               <div style={{ fontSize: 56, marginBottom: 16 }}>🍃</div>
               <p style={{ fontWeight: 800, color: 'var(--text-primary)', marginBottom: 8, fontSize: 16 }}>
-                Belum ada catatan limbah dapur
+                Belum ada catatan sampah
               </p>
               <p style={{ fontSize: 14, color: 'var(--text-muted)', marginBottom: 20, lineHeight: 1.6 }}>
-                Mulai catat limbah dapur hari ini dan bantu jaga lingkungan bersama!
+                Mulai catat sampah harian dan bantu jaga lingkungan bersama!
               </p>
               <button onClick={() => setShowForm(true)} className="btn-primary" style={{ fontSize: 14, padding: '12px 24px' }}>
                 <FiPlus size={15} /> Catat Pertama Saya
@@ -472,7 +472,7 @@ const Dashboard = () => {
                 <thead>
                   <tr>
                     <th>Tanggal</th>
-                    <th>Limbah Dapur</th>
+                    <th>Sampah</th>
                     <th>Catatan</th>
                     <th>Poin</th>
                   </tr>
@@ -565,7 +565,7 @@ const Dashboard = () => {
               }}>
                 <div>
                   <h2 style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 18, color: 'var(--text-primary)' }}>
-                    🍃 Catat Limbah Dapur Hari Ini
+                    ♻️ Catat Sampah Harian
                   </h2>
                   <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 3, fontWeight: 600 }}>
                     {new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
@@ -586,7 +586,7 @@ const Dashboard = () => {
                 {/* Jenis Limbah */}
                 <div>
                   <label style={{ display: 'block', fontSize: 14, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 10 }}>
-                    🗑️ Jenis Limbah Dapur Hari Ini
+                    🗑️ Jenis Sampah Hari Ini
                   </label>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
                     {kitchenWasteTypes.map(opt => (
