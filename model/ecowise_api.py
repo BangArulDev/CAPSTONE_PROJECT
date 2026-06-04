@@ -77,7 +77,7 @@ class PredictionResponse(BaseModel):
 def root():
     return {"message": "Eco Wise AI API v1.0 — Klasifikasi Sampah"}
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
 def health_check():
     return {"status": "healthy", "model_loaded": model is not None}
 
