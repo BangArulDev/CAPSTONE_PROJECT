@@ -48,8 +48,11 @@ router.post('/scan', authenticateToken, upload.single('file'), async (req, res) 
       contentType: req.file.mimetype,
     });
 
-    // Kirim request ke API Python yang sedang berjalan di port 8000
-    const pythonResponse = await axios.post('http://127.0.0.1:8000/predict', formData, {
+    // Gunakan URL dari environment variable, fallback ke localhost untuk development
+    const pythonApiUrl = process.env.PYTHON_API_URL || 'http://127.0.0.1:8000';
+    
+    // Kirim request ke API Python
+    const pythonResponse = await axios.post(`${pythonApiUrl}/predict`, formData, {
       headers: {
         ...formData.getHeaders(),
       },
