@@ -73,7 +73,7 @@ class PredictionResponse(BaseModel):
     emoji: str
     top_3: List[dict]
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def root():
     return {"message": "Eco Wise AI API v1.0 — Klasifikasi Sampah"}
 
