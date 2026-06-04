@@ -63,6 +63,11 @@ app.use('/api/recommendations', recommendationsRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/badges', badgesRoutes);
 
+// Root endpoint untuk UptimeRobot
+app.get('/', (_req, res) => {
+  res.send('Eco Wise API is running 🌱');
+});
+
 // Health check
 app.get('/api/health', (_req, res) => {
   res.json({
